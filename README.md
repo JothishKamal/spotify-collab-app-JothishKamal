@@ -2,8 +2,8 @@
 <a href="https://dscvit.com">
 	<img width="400" src="https://user-images.githubusercontent.com/56252312/159312411-58410727-3933-4224-b43e-4e9b627838a3.png#gh-light-mode-only" alt="GDSC VIT"/>
 </a>
-	<h2 align="center"> < Insert Project Title Here > </h2>
-	<h4 align="center"> < Insert Project Description Here > <h4>
+	<h2 align="center"> Spotify Collab App </h2>
+	<h4 align="center"> During hackathons and such events during down times or chilling times we can let users play songs of their choice. Limit access to participants via a wrapper to spotify playlists. <h4>
 </p>
 
 ---
@@ -15,30 +15,22 @@
 
 
 ## Features
-- [ ]  < feature >
-- [ ]  < feature >
-- [ ]  < feature >
-- [ ]  < feature >
+- [ ]  Search interface
+- [ ]  Access to featured playlists
+- [ ]  Now playing
+- [ ]  Login to Spotify
 
 <br>
 
 ## Dependencies
- - < dependency >
- - < dependency >
 
 
 ## Running
 
 
-< directions to install > 
+Flutter needs to be installed on the system, along with Xcode for iOS and Android Studio for Android.
 ```bash
-< insert code >
-```
-
-< directions to execute >
-
-```bash
-< insert code >
+flutter run
 ```
 
 ## Contributors
@@ -46,15 +38,15 @@
 <table>
 	<tr align="center">
 		<td>
-		John Doe
+		Aakaash SS
 		<p align="center">
-			<img src = "https://dscvit.com/images/dsc-logo-square.svg" width="150" height="150" alt="Your Name Here (Insert Your Image Link In Src">
+			<img src = "https://b.l3n.co/i/zN1tPa.jpeg" width="150" height="150">
 		</p>
 			<p align="center">
-				<a href = "https://github.com/person1">
+				<a href = "https://github.com/ssaakaash">
 					<img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36" alt="GitHub"/>
 				</a>
-				<a href = "https://www.linkedin.com/in/person1">
+				<a href = "https://www.linkedin.com/in/ssaakaash">
 					<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36" alt="LinkedIn"/>
 				</a>
 			</p>
