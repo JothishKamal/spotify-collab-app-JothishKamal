@@ -9,7 +9,7 @@ final ThemeData darkTheme = ThemeData(
   ),
   scaffoldBackgroundColor: const Color(0xFF121212),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color.fromRGBO(255, 255, 255, 0.05),
+    backgroundColor: Color(0xff1d1d1d),
   ),
   inputDecorationTheme: const InputDecorationTheme(
     filled: true,
