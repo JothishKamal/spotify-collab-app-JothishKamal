@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotify_collab_app/widgets/custom_text_field.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -48,112 +49,23 @@ class LoginScreen extends StatelessWidget {
                   constraints: BoxConstraints(
                     minHeight: constraints.maxHeight,
                   ),
-                  child: IntrinsicHeight(
+                  child: const IntrinsicHeight(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 50),
-                        const Text(
-                          'Email ID',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Avenir Next',
-                            fontWeight: FontWeight.w600,
-                          ),
+                        SizedBox(height: 50),
+                        CustomTextField(
+                          labelText: 'Email ID',
+                          obscureText: false,
                         ),
-                        const SizedBox(height: 10),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextField(
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                    color: Colors.white.withOpacity(0.3)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
-                              ),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                            ),
-                          ),
+                        SizedBox(height: 50),
+                        CustomTextField(
+                          labelText: 'Password',
+                          obscureText: true,
                         ),
-                        const SizedBox(height: 50),
-                        const Text(
-                          'Password',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Avenir Next',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextField(
-                            style: const TextStyle(color: Colors.white),
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                    color: Colors.white.withOpacity(0.3)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
-                              ),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 70),
+                        SizedBox(height: 70),
                         Center(
-                          child: Container(
-                            width: double.infinity,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Handle login button press
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.transparent,
-                              ),
-                              child: const Text(
-                                'Login',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: 'Avenir Next',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
+                          child: LoginButton(),
                         ),
                       ],
                     ),
