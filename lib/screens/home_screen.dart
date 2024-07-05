@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -115,53 +114,111 @@ class HomeScreen extends StatelessWidget {
               tileMode: TileMode.mirror,
             ),
           ),
-          child: const Padding(
-            padding: EdgeInsets.only(top: 40, left: 15, right: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Recent Playlists",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 20),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: [
-                    RecentCard(),
-                    SizedBox(width: 20),
-                    RecentCard(),
-                    SizedBox(width: 20),
-                    RecentCard(),
-                    SizedBox(width: 20),
-                    RecentCard(),
-                    SizedBox(width: 20),
-                    RecentCard(),
-                    SizedBox(width: 20),
-                    RecentCard(),
-                    SizedBox(width: 20),
-                  ]),
-                ),
-                SizedBox(height: 40),
-                Text(
-                  "Your Favourites",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 10),
-                Column(
-                  children: [
-                    SongWidget(),
-                    SizedBox(height: 20),
-                    SongWidget(),
-                    SizedBox(height: 20),
-                    SongWidget(),
-                    SizedBox(height: 20),
-                  ],
-                )
-              ],
+          child: const SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(top: 40, left: 15, right: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Recent Playlists",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 20),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(children: [
+                      RecentCard(),
+                      SizedBox(width: 20),
+                      RecentCard(),
+                      SizedBox(width: 20),
+                      RecentCard(),
+                      SizedBox(width: 20),
+                      RecentCard(),
+                      SizedBox(width: 20),
+                      RecentCard(),
+                      SizedBox(width: 20),
+                      RecentCard(),
+                      SizedBox(width: 20),
+                    ]),
+                  ),
+                  SizedBox(height: 40),
+                  Text(
+                    "Your Favourites",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    children: [
+                      SongWidget(),
+                      SizedBox(height: 20),
+                      SongWidget(),
+                      SizedBox(height: 20),
+                      SongWidget(),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                  Spacer(),
+                  NowPlaying(),
+                ],
+              ),
             ),
           ),
         ));
+  }
+}
+
+class NowPlaying extends StatelessWidget {
+  const NowPlaying({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: const LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [Color.fromARGB(255, 128, 33, 21), Color(0xff646B35)])),
+      child: Stack(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0xffC14231)),
+              ),
+              SizedBox(width: 8),
+              Text(
+                "From Me to You - Mono / Remastered",
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: LinearProgressIndicator(
+              borderRadius: BorderRadius.circular(10),
+              color: Color(0xffB2B2B2),
+              backgroundColor: Color.fromARGB(255, 128, 33, 21),
+            ),
+          ),
+        )
+      ]),
+    );
   }
 }
 
@@ -176,7 +233,7 @@ class SongWidget extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromARGB(41, 255, 255, 255),
+        color: Color.fromARGB(50, 0, 0, 0),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -186,13 +243,16 @@ class SongWidget extends StatelessWidget {
             Container(
               width: 64,
               height: 64,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), color: Colors.white),
             ),
             Container(
               width: 34,
               height: 34,
               margin: const EdgeInsets.only(right: 15),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Color(0xff24bb58)),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Color(0xff24bb58)),
               child: const Icon(
                 Icons.play_arrow,
                 color: Colors.black,
