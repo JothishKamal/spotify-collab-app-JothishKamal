@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Spotify Collab',
       theme: darkTheme,
-      home: const LoginScreen(),
+      home: const HomeScreen(),
     );
   }
 }
