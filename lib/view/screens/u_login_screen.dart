@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_collab_app/widgets/custom_text_field.dart';
+import 'package:spotify_collab_app/view/widgets/u_custom_text_field.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -20,7 +20,6 @@ class LoginScreen extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
-            fontFamily: 'Avenir Next',
             fontWeight: FontWeight.w600,
           ),
         ),
