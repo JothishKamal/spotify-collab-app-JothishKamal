@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 import 'package:spotify_collab_app/view/widgets/u_custom_text_field.dart';
 
 final textFieldVisibilityProvider = StateProvider<int>((ref) => 0);
@@ -22,85 +23,10 @@ class LoginScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          IgnorePointer(
-            ignoring: true,
-            child: Stack(
-              children: [
-                Positioned(
-                  left: width * 0.3,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: height * 0.27,
-                  left: width * 0.6,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union-1.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: height * 0.45,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union-2.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: height * 0.05,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union-3.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: height * 0.45,
-                  right: 0,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union-4.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union-5.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  child: SvgPicture.asset(
-                    'assets/login_bg/Union-6.svg',
-                    colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(0.25),
-                      BlendMode.modulate,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          BackgroundWidget(
+            width: width,
+            height: height,
+            color: Colors.white.withOpacity(0.35),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
