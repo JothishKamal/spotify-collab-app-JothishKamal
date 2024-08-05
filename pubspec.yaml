@@ -182,6 +182,10 @@ flutter:
         - asset: fonts/Poppins/Poppins-ThinItalic.ttf
           weight: 100
           style: italic
+    - family: Product-Sans
+      fonts:
+        - asset: fonts/Product-Sans/Product-Sans-Regular.ttf
+      
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -7,8 +7,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Stack(children: [
       Container(
+        color: Color(0xff111111),
         child: SvgPicture.asset(
           'assets/bg.svg',
           colorFilter: const ColorFilter.mode(
