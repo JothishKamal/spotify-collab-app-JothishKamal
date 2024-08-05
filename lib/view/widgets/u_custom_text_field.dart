@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatefulWidget {
   final String labelText;
   final bool obscureText;
+  final TextEditingController textEditingController;
 
   const CustomTextField({
     super.key,
     required this.labelText,
     required this.obscureText,
+    required this.textEditingController,
   });
 
   @override
@@ -27,7 +29,7 @@ class CustomTextFieldState extends State<CustomTextField> {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
-            fontFamily: 'Avenir Next',
+            fontFamily: 'Gotham',
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -38,7 +40,8 @@ class CustomTextFieldState extends State<CustomTextField> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: TextField(
-            style: const TextStyle(color: Colors.white),
+            controller: widget.textEditingController,
+            style: const TextStyle(color: Colors.white, fontFamily: 'Gotham'),
             obscureText: widget.obscureText && !_isPasswordVisible,
             decoration: InputDecoration(
               border: OutlineInputBorder(

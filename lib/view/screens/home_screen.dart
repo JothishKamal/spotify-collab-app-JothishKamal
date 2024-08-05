@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
       Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          centerTitle: true,
           title: const Text(
             "shared playlists",
             style: TextStyle(
@@ -86,10 +87,9 @@ class HomeScreen extends StatelessWidget {
                 height: 15,
               ),
               PlaylistCard(
-                name: "Hexathon' 23",
-                participants: 1200,
-                img: "assets/hexathon.png"
-              ),
+                  name: "Hexathon' 23",
+                  participants: 1200,
+                  img: "assets/hexathon.png"),
             ],
           ),
         ),
