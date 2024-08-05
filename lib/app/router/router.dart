@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_collab_app/view/screens/u_home_screen.dart';
+import 'package:spotify_collab_app/view/screens/home_screen.dart';
 
 final router = GoRouter(
   initialLocation: '/',

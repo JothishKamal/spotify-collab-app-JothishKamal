@@ -11,7 +11,7 @@ class CollabifyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Kalculate',
       theme: darkTheme,
-      themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );
