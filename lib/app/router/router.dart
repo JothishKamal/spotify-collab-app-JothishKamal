@@ -27,5 +27,9 @@ final router = GoRouter(
       path: '/home',
       pageBuilder: (context, state) => const MaterialPage(child: HomeScreen()),
     ),
+    GoRoute(
+      path: '/connect',
+      pageBuilder: (context, state) => const MaterialPage(child: ConnectScreen()),
+    ),
   ],
 );

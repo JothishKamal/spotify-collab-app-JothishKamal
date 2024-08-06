@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 
 class ConnectScreen extends StatelessWidget {
   const ConnectScreen({super.key});
@@ -11,11 +10,13 @@ class ConnectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
+        width: 1000,
         color: Color(0xFF5822EE),
         child: SvgPicture.asset(
           'assets/bg.svg',
           colorFilter:
               const ColorFilter.mode(Color(0xffd056fc), BlendMode.srcIn),
+          fit: BoxFit.cover,
         ),
       ),
       Scaffold(
@@ -63,8 +64,8 @@ class ConnectScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xff1db954),
+                    decoration: const BoxDecoration(
+                      color:  Color(0xff1db954),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     height: 45,
