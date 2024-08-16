@@ -10,11 +10,13 @@ class HomeScreen extends StatelessWidget {
 
     return Stack(children: [
       Container(
+        width: 1000,
         color: Color(0xff111111),
         child: SvgPicture.asset(
           'assets/bg.svg',
           colorFilter: const ColorFilter.mode(
               Color.fromARGB(50, 255, 255, 255), BlendMode.srcIn),
+            fit: BoxFit.cover,
         ),
       ),
       Scaffold(

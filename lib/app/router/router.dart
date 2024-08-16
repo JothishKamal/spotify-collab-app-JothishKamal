@@ -5,6 +5,7 @@ import 'package:spotify_collab_app/view/screens/login_screen.dart';
 import 'package:spotify_collab_app/view/screens/signup_screen.dart';
 import 'package:spotify_collab_app/view/screens/home_screen.dart';
 import 'package:spotify_collab_app/view/screens/connect_screen.dart';
+import 'package:spotify_collab_app/view/screens/new_playlist_screen.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -12,7 +13,7 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       pageBuilder: (context, state) =>
-          const MaterialPage(child: ConnectScreen()),
+          const MaterialPage(child: NewPlaylistScreen()),
     ),
     GoRoute(
       path: '/login',
