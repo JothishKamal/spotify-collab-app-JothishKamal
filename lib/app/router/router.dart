@@ -19,6 +19,11 @@ final router = GoRouter(
       pageBuilder: (context, state) => const MaterialPage(child: LoginScreen()),
     ),
     GoRoute(
+      path: '/connect',
+      pageBuilder: (context, state) =>
+          const MaterialPage(child: ConnectScreen()),
+    ),
+    GoRoute(
       path: '/signup',
       pageBuilder: (context, state) =>
           const MaterialPage(child: SignupScreen()),
