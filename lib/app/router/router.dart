@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/view/screens/create_screen.dart';
+import 'package:spotify_collab_app/view/screens/join_screen.dart';
 import 'package:spotify_collab_app/view/screens/landing_screen.dart';
 import 'package:spotify_collab_app/view/screens/login_screen.dart';
 import 'package:spotify_collab_app/view/screens/signup_screen.dart';
@@ -12,7 +14,7 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       pageBuilder: (context, state) =>
-          const MaterialPage(child: ConnectScreen()),
+          const MaterialPage(child: CreateScreen()),
     ),
     GoRoute(
       path: '/login',
@@ -34,7 +36,16 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/connect',
-      pageBuilder: (context, state) => const MaterialPage(child: ConnectScreen()),
+      pageBuilder: (context, state) =>
+          const MaterialPage(child: ConnectScreen()),
+    ),
+    GoRoute(
+        path: '/create',
+        pageBuilder: (context, state) =>
+            const MaterialPage(child: CreateScreen())),
+    GoRoute(
+      path: '/join',
+      pageBuilder: (context, state) => const MaterialPage(child: JoinScreen()),
     ),
   ],
 );

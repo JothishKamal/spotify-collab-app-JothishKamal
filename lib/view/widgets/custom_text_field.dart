@@ -80,36 +80,3 @@ class CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
-
-class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: ElevatedButton(
-        onPressed: () {
-          // Handle login button press
-        },
-        style: ElevatedButton.styleFrom(
-          shadowColor: Colors.transparent,
-        ),
-        child: const Text(
-          'Login',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontFamily: 'Avenir Next',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}

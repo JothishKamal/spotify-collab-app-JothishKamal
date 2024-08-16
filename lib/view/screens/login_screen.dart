@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/view/widgets/background_widget.dart';
-import 'package:spotify_collab_app/view/widgets/u_custom_text_field.dart';
+import 'package:spotify_collab_app/view/widgets/custom_text_field.dart';
 
 final textFieldVisibilityProvider = StateProvider<int>((ref) => 0);
 

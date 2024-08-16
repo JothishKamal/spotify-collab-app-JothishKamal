@@ -65,7 +65,7 @@ class ConnectScreen extends StatelessWidget {
                   const Spacer(),
                   Container(
                     decoration: const BoxDecoration(
-                      color:  Color(0xff1db954),
+                      color: Color(0xff1db954),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     height: 45,
