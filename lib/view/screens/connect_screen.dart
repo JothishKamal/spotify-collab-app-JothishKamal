@@ -8,107 +8,98 @@ class ConnectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Container(
-        width: 1000,
-        color: Color(0xFF5822EE),
-        child: SvgPicture.asset(
-          'assets/bg.svg',
-          colorFilter:
-              const ColorFilter.mode(Color(0xffd056fc), BlendMode.srcIn),
-          fit: BoxFit.cover,
-        ),
+    return Scaffold(
+      backgroundColor: const Color(0xff5822EE),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
       ),
-      Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: const Text(
-              "Connect to Spotify",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Gotham",
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            backgroundColor: Colors.transparent,
+      body: Stack(children: [
+        Container(
+          height: 1000,
+          width: 1000,
+          child: SvgPicture.asset(
+            'assets/bg_splash.svg',
+            fit: BoxFit.cover,
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Center(
-              child: Column(
-                children: [
-                  const Spacer(),
-                  const Text(
-                    "WELCOME TO\nCOLLABIFY",
-                    style: TextStyle(
-                      fontFamily: "Gotham",
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      height: 0.8,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    "Unlock a world of music possibilities by connecting your "
-                    "Spotify account and dive into a seamless experience tailored "
-                    "just for you.",
-                    style: TextStyle(
-                      fontFamily: "Product-Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xff1db954),
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                    height: 45,
-                    width: 225,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Connect",
-                          style: TextStyle(
-                            fontFamily: "Gotham",
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        SvgPicture.asset("assets/logo.svg")
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Text(
-                    "Authorize Collabify to access your Spotify account, "
-                    "enabling you to explore, play and share music with friends "
-                    "effortlessly.",
-                    style: TextStyle(
-                      fontFamily: "Gotham",
-                      fontSize: 10,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const Spacer(),
-                ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(40.0),
+          child: Column(
+            children: [
+              const Spacer(),
+              const Text(
+                "welcome to collabify",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: "Gotham",
+                  fontSize: 45,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  height: 1.2,
+                ),
               ),
-            ),
-          )),
-    ]);
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Unlock a world of music possibilities by connecting your "
+                "Spotify account and dive into a seamless experience tailored "
+                "just for you.",
+                style: TextStyle(
+                  fontFamily: "Product-Sans",
+                  fontSize: 16.53,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xff1db954),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                height: 45,
+                width: 225,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Connect",
+                      style: TextStyle(
+                        fontFamily: "Gotham",
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    SvgPicture.asset("assets/logo.svg")
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                "Authorize Collabify to access your Spotify account, "
+                "enabling you to explore, play and share music with friends "
+                "effortlessly.",
+                style: TextStyle(
+                  fontFamily: "Gotham",
+                  fontSize: 11,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                  backgroundColor: Color.fromARGB(13, 0, 0, 0)
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      ]),
+    );
   }
 }
