@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,34 +9,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Stack(children: [
-      Container(
-        width: 1000,
-        color: Color(0xff111111),
-        child: SvgPicture.asset(
-          'assets/bg.svg',
-          colorFilter: const ColorFilter.mode(
-              Color.fromARGB(50, 255, 255, 255), BlendMode.srcIn),
-            fit: BoxFit.cover,
-        ),
-      ),
-      Scaffold(
+    return Scaffold(
+      backgroundColor: const Color(0xff111111),
+      appBar: AppBar(
+        title: const Title(title: "shared playlists",),
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "shared playlists",
-            style: TextStyle(
-                fontFamily: "Gotham",
-                fontWeight: FontWeight.w700,
-                shadows: <Shadow>[
-                  Shadow(offset: Offset(0, 1), color: Color(0xffDA84FE))
-                ]),
+      ),
+      body: Stack(children: [
+        Container(
+          height: 1000,
+          child: SvgPicture.asset(
+            'assets/bg.svg',
+            colorFilter:
+                const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
+            fit: BoxFit.cover,
           ),
-          backgroundColor: Colors.transparent,
         ),
-        body: const Padding(
+        const Padding(
           padding: EdgeInsets.all(32.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +88,43 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
+      ]),
+    );
+  }
+}
+
+class Title extends StatelessWidget {
+  const Title({
+    super.key,
+    required this.title,
+  });
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      const Spacer(),
+      const SizedBox(width: 20,),
+      Text(
+        title,
+        style: const TextStyle(
+            fontFamily: "Gotham",
+            fontWeight: FontWeight.w700,
+            fontSize: 34,
+            shadows: <Shadow>[
+              Shadow(offset: Offset(0, 1), color: Color(0xffDA84FE))
+            ]),
       ),
+      Column(
+        children: [
+          SvgPicture.asset('assets/highlight.svg',),
+          const SizedBox(
+            height: 30,
+          ),
+        ],
+      ),
+      const Spacer(),
     ]);
   }
 }

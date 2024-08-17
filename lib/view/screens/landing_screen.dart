@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/view/widgets/background_widget.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -12,33 +14,61 @@ class LandingScreen extends StatelessWidget {
     double height = MediaQuery.sizeOf(context).height;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
       backgroundColor: const Color(0xff5822EE),
       body: Stack(
         children: [
-          BackgroundWidget(
-            width: width,
-            height: height,
-            color: const Color(0xffd056fc),
+          Container(
+            height: 1000,
+            child: SvgPicture.asset(
+              'assets/bg_splash.svg',
+              fit: BoxFit.cover,
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              const Center(
-                child: Text(
-                  'collabify',
-                  style: TextStyle(
-                    fontFamily: 'Gotham',
-                    shadows: <Shadow>[
-                      Shadow(
-                        color: Color(0xffDA84FE),
-                        offset: Offset(0, 2),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(height: 40,),
+                        SvgPicture.asset(
+                          'assets/splash_left.svg',
+                          fit: BoxFit.cover,
+                        ),
+                      ],
+                    ),
+                    const Text(
+                      'collabify',
+                      style: TextStyle(
+                        fontFamily: 'Gotham',
+                        shadows: <Shadow>[
+                          Shadow(
+                            color: Color(0xffDA84FE),
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                        fontSize: 45,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
                       ),
-                    ],
-                    fontSize: 45,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
+                    ),
+                    Column(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/splash_right.svg',
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(height: 25,),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               const Spacer(),

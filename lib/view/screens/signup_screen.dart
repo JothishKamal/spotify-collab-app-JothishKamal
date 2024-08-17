@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 import 'package:spotify_collab_app/view/widgets/custom_text_field.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+
 final textFieldVisibilityProvider = StateProvider<int>((ref) => 0);
 
 class SignupScreen extends ConsumerWidget {
@@ -22,12 +25,35 @@ class SignupScreen extends ConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: false,
+        title: IconButton(
+          onPressed: () {
+            if (textFieldVisibility == 1) {
+              ref.read(textFieldVisibilityProvider.notifier).state = 0;
+            } else {
+              context.go('/');
+            }
+          },
+          icon: SvgPicture.asset(
+              'assets/back.svg',
+              colorFilter:
+                  const ColorFilter.mode(Color(0xff5822EE), BlendMode.srcIn),
+              fit: BoxFit.cover,
+            ),
+        ),
+        backgroundColor: Colors.transparent,
+      ),
       body: Stack(
         children: [
-          BackgroundWidget(
-            width: width,
-            height: height,
-            color: Colors.white.withOpacity(.5),
+          Container(
+            height: 1000,
+            child: SvgPicture.asset(
+              'assets/bg.svg',
+              colorFilter:
+                  const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
+              fit: BoxFit.cover,
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
@@ -36,39 +62,29 @@ class SignupScreen extends ConsumerWidget {
             ),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (textFieldVisibility == 1) {
-                          ref.read(textFieldVisibilityProvider.notifier).state =
-                              0;
-                        } else {
-                          context.go('/');
-                        }
-                      },
-                      icon: const Icon(Icons.arrow_back_ios),
-                      color: const Color(0xff5822EE),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.05,
                     ),
-                    SizedBox(
-                      width: width * 0.25,
-                    ),
-                    const Text(
-                      'sign up',
-                      style: TextStyle(
-                        fontFamily: 'Gotham',
-                        shadows: <Shadow>[
-                          Shadow(
-                            color: Color(0xffDA84FE),
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
+                  child: const Row(
+                    children: [
+                      Text(
+                        'sign up',
+                        style: TextStyle(
+                          fontFamily: 'Gotham',
+                          shadows: <Shadow>[
+                            Shadow(
+                              color: Color(0xffDA84FE),
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                          fontSize: 40,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 if (textFieldVisibility == 0) ...[
                   Padding(
