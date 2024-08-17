@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -14,7 +13,7 @@ class ConnectScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: Stack(children: [
-        Container(
+        SizedBox(
           height: 1000,
           width: 1000,
           child: SvgPicture.asset(

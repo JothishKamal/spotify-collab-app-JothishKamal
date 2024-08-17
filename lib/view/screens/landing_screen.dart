@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -10,7 +9,6 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
     double height = MediaQuery.sizeOf(context).height;
 
     return Scaffold(
@@ -20,7 +18,7 @@ class LandingScreen extends StatelessWidget {
       backgroundColor: const Color(0xff5822EE),
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             height: 1000,
             width: 1000,
             child: SvgPicture.asset(
@@ -38,7 +36,9 @@ class LandingScreen extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        SizedBox(height: 40,),
+                        const SizedBox(
+                          height: 40,
+                        ),
                         SvgPicture.asset(
                           'assets/splash_left.svg',
                           fit: BoxFit.cover,
@@ -66,7 +66,9 @@ class LandingScreen extends StatelessWidget {
                           'assets/splash_right.svg',
                           fit: BoxFit.cover,
                         ),
-                        SizedBox(height: 25,),
+                        const SizedBox(
+                          height: 25,
+                        ),
                       ],
                     ),
                   ],

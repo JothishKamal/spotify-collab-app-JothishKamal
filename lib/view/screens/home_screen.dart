@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +16,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: Stack(children: [
-        Container(
+        SizedBox(
           height: 1000,
           width: 1000,
           child: SvgPicture.asset(
@@ -181,7 +180,7 @@ class PlaylistCard extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
                                 color: !isActive
-                                    ? Color.fromARGB(255, 0, 0, 0)
+                                    ? const Color.fromARGB(255, 0, 0, 0)
                                     : Colors.white),
                           ),
                           Row(
@@ -263,7 +262,7 @@ class NewPlaylistButton extends StatelessWidget {
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Icon(
+            child: const Icon(
               Icons.add_circle,
               color: Color(0xff5822EE),
               size: 43,

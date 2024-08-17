@@ -34,17 +34,17 @@ class LoginScreen extends ConsumerWidget {
             }
           },
           icon: SvgPicture.asset(
-              'assets/back.svg',
-              colorFilter:
-                  const ColorFilter.mode(Color(0xff5822EE), BlendMode.srcIn),
-              fit: BoxFit.cover,
-            ),
+            'assets/back.svg',
+            colorFilter:
+                const ColorFilter.mode(Color(0xff5822EE), BlendMode.srcIn),
+            fit: BoxFit.cover,
+          ),
         ),
         backgroundColor: Colors.transparent,
       ),
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             height: 1000,
             width: 1000,
             child: SvgPicture.asset(
@@ -63,8 +63,8 @@ class LoginScreen extends ConsumerWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.05,
-                    ),
+                    horizontal: width * 0.05,
+                  ),
                   child: const Row(
                     children: [
                       Text(
@@ -93,7 +93,7 @@ class LoginScreen extends ConsumerWidget {
                     ),
                     child: CustomTextField(
                       textEditingController: emailController,
-                      labelText: 'Whats your email?',
+                      labelText: 'whats your email?',
                       obscureText: false,
                     ),
                   ),
@@ -142,13 +142,13 @@ class LoginScreen extends ConsumerWidget {
                       children: [
                         CustomTextField(
                           textEditingController: passwordController,
-                          labelText: 'Password',
+                          labelText: 'password',
                           obscureText: true,
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: height * 0.01),
                           child: const Text(
-                            'Forgot password?',
+                            'forgot password?',
                             style: TextStyle(
                               fontFamily: 'Gotham',
                               fontSize: 11,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 import 'package:spotify_collab_app/view/widgets/custom_text_field.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,7 +45,7 @@ class SignupScreen extends ConsumerWidget {
       ),
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             height: 1000,
             width: 1000,
             child: SvgPicture.asset(
@@ -95,7 +94,7 @@ class SignupScreen extends ConsumerWidget {
                     ),
                     child: CustomTextField(
                       textEditingController: emailController,
-                      labelText: 'Whats your email?',
+                      labelText: 'whats your email?',
                       obscureText: false,
                     ),
                   ),
@@ -141,7 +140,7 @@ class SignupScreen extends ConsumerWidget {
                     ),
                     child: CustomTextField(
                       textEditingController: passwordController,
-                      labelText: 'Password',
+                      labelText: 'password',
                       obscureText: true,
                     ),
                   ),
@@ -153,7 +152,7 @@ class SignupScreen extends ConsumerWidget {
                     ),
                     child: CustomTextField(
                       textEditingController: confirmPasswordController,
-                      labelText: 'Confirm Password',
+                      labelText: 'confirm password',
                       obscureText: true,
                     ),
                   ),
