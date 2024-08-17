@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -18,6 +19,7 @@ class HomeScreen extends StatelessWidget {
       body: Stack(children: [
         Container(
           height: 1000,
+          width: 1000,
           child: SvgPicture.asset(
             'assets/bg.svg',
             colorFilter:

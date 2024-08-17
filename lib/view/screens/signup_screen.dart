@@ -48,6 +48,7 @@ class SignupScreen extends ConsumerWidget {
         children: [
           Container(
             height: 1000,
+            width: 1000,
             child: SvgPicture.asset(
               'assets/bg.svg',
               colorFilter:
