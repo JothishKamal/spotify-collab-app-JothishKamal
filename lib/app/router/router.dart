@@ -13,38 +13,57 @@ final router = GoRouter(
   routes: <GoRoute>[
     GoRoute(
       path: '/',
-      pageBuilder: (context, state) => const MaterialPage(child: LandingScreen()),
-    ),
-    GoRoute(
-      path: '/login',
-      pageBuilder: (context, state) => const MaterialPage(child: LoginScreen()),
-    ),
-    GoRoute(
-      path: '/connect',
-      pageBuilder: (context, state) =>
-          const MaterialPage(child: ConnectScreen()),
-    ),
-    GoRoute(
-      path: '/signup',
-      pageBuilder: (context, state) =>
-          const MaterialPage(child: SignupScreen()),
+      pageBuilder: (context, state) => const MaterialPage(
+        child: LandingScreen(),
+      ),
+      routes: [
+        GoRoute(
+          path: 'login',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: LoginScreen()),
+        ),
+        GoRoute(
+          path: 'signup',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: SignupScreen()),
+        ),
+        GoRoute(
+          path: 'connect',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: ConnectScreen()),
+        ),
+        GoRoute(
+          path: 'home',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: HomeScreen()),
+        ),
+        GoRoute(
+          path: 'create',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: CreateScreen()),
+        ),
+        GoRoute(
+          path: 'join',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: JoinScreen()),
+        ),
+      ],
     ),
     GoRoute(
       path: '/home',
       pageBuilder: (context, state) => const MaterialPage(child: HomeScreen()),
-    ),
-    GoRoute(
-      path: '/connect',
-      pageBuilder: (context, state) =>
-          const MaterialPage(child: ConnectScreen()),
-    ),
-    GoRoute(
-        path: '/create',
-        pageBuilder: (context, state) =>
-            const MaterialPage(child: CreateScreen())),
-    GoRoute(
-      path: '/join',
-      pageBuilder: (context, state) => const MaterialPage(child: JoinScreen()),
+      routes: [
+        GoRoute(
+          path: 'create',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: CreateScreen()),
+        ),
+        GoRoute(
+          path: 'join',
+          pageBuilder: (context, state) =>
+              const MaterialPage(child: JoinScreen()),
+        ),
+      ],
     ),
   ],
 );

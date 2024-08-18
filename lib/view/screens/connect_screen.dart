@@ -10,12 +10,13 @@ class ConnectScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xff5822EE),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
       ),
       body: Stack(children: [
         SizedBox(
-          height: 1000,
-          width: 1000,
+          height: double.infinity,
+          width: double.infinity,
           child: SvgPicture.asset(
             'assets/bg_splash.svg',
             fit: BoxFit.cover,
@@ -86,12 +87,11 @@ class ConnectScreen extends StatelessWidget {
                 "enabling you to explore, play and share music with friends "
                 "effortlessly.",
                 style: TextStyle(
-                  fontFamily: "Gotham",
-                  fontSize: 11,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
-                  backgroundColor: Color.fromARGB(13, 0, 0, 0)
-                ),
+                    fontFamily: "Gotham",
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                    backgroundColor: Color.fromARGB(13, 0, 0, 0)),
                 textAlign: TextAlign.center,
               ),
               const Spacer(),

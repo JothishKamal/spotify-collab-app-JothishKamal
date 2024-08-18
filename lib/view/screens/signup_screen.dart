@@ -26,6 +26,7 @@ class SignupScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: false,
+        automaticallyImplyLeading: false,
         title: IconButton(
           onPressed: () {
             if (textFieldVisibility == 1) {
@@ -35,19 +36,19 @@ class SignupScreen extends ConsumerWidget {
             }
           },
           icon: SvgPicture.asset(
-              'assets/back.svg',
-              colorFilter:
-                  const ColorFilter.mode(Color(0xff5822EE), BlendMode.srcIn),
-              fit: BoxFit.cover,
-            ),
+            'assets/back.svg',
+            colorFilter:
+                const ColorFilter.mode(Color(0xff5822EE), BlendMode.srcIn),
+            fit: BoxFit.cover,
+          ),
         ),
         backgroundColor: Colors.transparent,
       ),
       body: Stack(
         children: [
           SizedBox(
-            height: 1000,
-            width: 1000,
+            height: double.infinity,
+            width: double.infinity,
             child: SvgPicture.asset(
               'assets/bg.svg',
               colorFilter:
@@ -64,8 +65,8 @@ class SignupScreen extends ConsumerWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.05,
-                    ),
+                    horizontal: width * 0.05,
+                  ),
                   child: const Row(
                     children: [
                       Text(

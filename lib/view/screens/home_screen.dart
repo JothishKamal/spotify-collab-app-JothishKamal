@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,84 +10,89 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xff111111),
       appBar: AppBar(
-        title: const Title(title: "shared playlists",),
+        title: const Title(
+          title: "shared playlists",
+        ),
         backgroundColor: Colors.transparent,
       ),
-      body: Stack(children: [
-        SizedBox(
-          height: 1000,
-          width: 1000,
-          child: SvgPicture.asset(
-            'assets/bg.svg',
-            colorFilter:
-                const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          SizedBox(
+            height: double.maxFinite,
+            width: double.maxFinite,
+            child: SvgPicture.asset(
+              'assets/bg.svg',
+              colorFilter:
+                  const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.all(32.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Create new Playlist ·",
-                style: TextStyle(
-                  fontFamily: "Gotham",
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+          const Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Create new Playlist ·",
+                  style: TextStyle(
+                    fontFamily: "Gotham",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              NewPlaylistButton(),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Active ·",
-                style: TextStyle(
-                  fontFamily: "Gotham",
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              PlaylistCard(
-                isActive: true,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Recent ·",
-                style: TextStyle(
-                  fontFamily: "Gotham",
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+                NewPlaylistButton(),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              PlaylistCard(
-                name: "WomenTechies' 24",
-                participants: 234,
-                img: "assets/wt.png",
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              PlaylistCard(
+                Text(
+                  "Active ·",
+                  style: TextStyle(
+                    fontFamily: "Gotham",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                PlaylistCard(
+                  isActive: true,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Recent ·",
+                  style: TextStyle(
+                    fontFamily: "Gotham",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                PlaylistCard(
+                  name: "WomenTechies' 24",
+                  participants: 234,
+                  img: "assets/wt.png",
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                PlaylistCard(
                   name: "Hexathon' 23",
                   participants: 1200,
-                  img: "assets/hexathon.png"),
-            ],
+                  img: "assets/hexathon.png",
+                ),
+              ],
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
@@ -104,29 +107,35 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      const Spacer(),
-      const SizedBox(width: 20,),
-      Text(
-        title,
-        style: const TextStyle(
-            fontFamily: "Gotham",
-            fontWeight: FontWeight.w700,
-            fontSize: 34,
-            shadows: <Shadow>[
-              Shadow(offset: Offset(0, 1), color: Color(0xffDA84FE))
-            ]),
-      ),
-      Column(
-        children: [
-          SvgPicture.asset('assets/highlight.svg',),
-          const SizedBox(
-            height: 30,
-          ),
-        ],
-      ),
-      const Spacer(),
-    ]);
+    return Row(
+      children: [
+        const Spacer(),
+        const SizedBox(
+          width: 20,
+        ),
+        Text(
+          title,
+          style: const TextStyle(
+              fontFamily: "Gotham",
+              fontWeight: FontWeight.w700,
+              fontSize: 34,
+              shadows: <Shadow>[
+                Shadow(offset: Offset(0, 1), color: Color(0xffDA84FE))
+              ]),
+        ),
+        Column(
+          children: [
+            SvgPicture.asset(
+              'assets/highlight.svg',
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+          ],
+        ),
+        const Spacer(),
+      ],
+    );
   }
 }
 

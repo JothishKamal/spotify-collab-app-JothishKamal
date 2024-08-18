@@ -25,6 +25,7 @@ class LoginScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: false,
+        automaticallyImplyLeading: false,
         title: IconButton(
           onPressed: () {
             if (textFieldVisibility == 1) {
@@ -45,8 +46,8 @@ class LoginScreen extends ConsumerWidget {
       body: Stack(
         children: [
           SizedBox(
-            height: 1000,
-            width: 1000,
+            height: double.infinity,
+            width: double.infinity,
             child: SvgPicture.asset(
               'assets/bg.svg',
               colorFilter:

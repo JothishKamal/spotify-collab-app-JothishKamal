@@ -19,8 +19,8 @@ class LandingScreen extends StatelessWidget {
       body: Stack(
         children: [
           SizedBox(
-            height: 1000,
-            width: 1000,
+            height: double.infinity,
+            width: double.infinity,
             child: SvgPicture.asset(
               'assets/bg_splash.svg',
               fit: BoxFit.cover,
