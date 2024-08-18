@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/view/screens/admin_screen.dart';
 import 'package:spotify_collab_app/view/screens/create_screen.dart';
 import 'package:spotify_collab_app/view/screens/join_screen.dart';
 import 'package:spotify_collab_app/view/screens/landing_screen.dart';
@@ -47,21 +48,10 @@ final router = GoRouter(
           pageBuilder: (context, state) =>
               const MaterialPage(child: JoinScreen()),
         ),
-      ],
-    ),
-    GoRoute(
-      path: '/home',
-      pageBuilder: (context, state) => const MaterialPage(child: HomeScreen()),
-      routes: [
         GoRoute(
-          path: 'create',
+          path: 'admin',
           pageBuilder: (context, state) =>
-              const MaterialPage(child: CreateScreen()),
-        ),
-        GoRoute(
-          path: 'join',
-          pageBuilder: (context, state) =>
-              const MaterialPage(child: JoinScreen()),
+              const MaterialPage(child: AdminScreen()),
         ),
       ],
     ),
