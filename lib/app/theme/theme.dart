@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: const Color(0xFF1ED760),
+  primaryColor: const Color(0xFF5822EE),
   colorScheme: const ColorScheme.dark(
-    primary: Color(0xFF1ED760),
-    secondary: Color(0xFF1ED760),
+    primary: Color(0xFF5822EE),
+    secondary: Color(0xFF5822EE),
   ),
   scaffoldBackgroundColor: const Color(0xFF121212),
   appBarTheme: const AppBarTheme(
@@ -15,11 +15,11 @@ final ThemeData darkTheme = ThemeData(
     filled: true,
     fillColor: Color(0xFF2C2C2C),
     border: OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF1ED760)),
+      borderSide: BorderSide(color: Color(0xFF5822EE)),
     ),
   ),
   buttonTheme: const ButtonThemeData(
-    buttonColor: Color(0xFF1ED760),
+    buttonColor: Color(0xFF5822EE),
     textTheme: ButtonTextTheme.primary,
   ),
 );
