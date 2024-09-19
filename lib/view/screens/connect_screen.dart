@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/constants/constants.dart';
 import 'package:spotify_collab_app/providers/auth_provider.dart';
 import 'package:uni_links/uni_links.dart';
@@ -32,6 +33,7 @@ class ConnectScreenState extends ConsumerState<ConnectScreen> {
           log('Access Token: $accessToken');
 
           ref.read(authProvider.notifier).setAccessToken(accessToken);
+          context.replace('/home');
         } else {
           log('No access token found');
         }
@@ -48,7 +50,7 @@ class ConnectScreenState extends ConsumerState<ConnectScreen> {
   }
 
   Future<void> _launchSpotifyLogin() async {
-    const url = '$devUrl/v1/auth/spotify/login';
+    const url = '$devUrl/v1/auth/spotify/login/app';
     launchUrl(Uri.parse(url));
   }
 

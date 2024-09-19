@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xff111111),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Title(
           title: "shared playlists",
         ),

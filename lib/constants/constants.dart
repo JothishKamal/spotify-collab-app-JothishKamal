@@ -1,1 +1,1 @@
-const devUrl = 'https://3ba5-171-79-54-237.ngrok-free.app';
+const devUrl = 'https://c2de-136-233-9-106.ngrok-free.app';
