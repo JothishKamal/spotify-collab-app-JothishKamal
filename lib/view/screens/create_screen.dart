@@ -1,8 +1,13 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/utils/api_util.dart';
+import 'package:spotify_collab_app/view/models/create_playlist_sucess.dart';
 import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 import 'package:spotify_collab_app/view/widgets/custom_text_field.dart';
 import 'package:spotify_collab_app/providers/photo_upload_notifier.dart';
@@ -130,7 +135,43 @@ class CreateScreen extends ConsumerWidget {
                               const Color(0xff5822EE),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (eventNameController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Event name cannot be empty'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            } else {
+                              Response<dynamic> response =
+                                  await apiUtil.post('/v1/playlists', {
+                                'name': eventNameController.text,
+                              });
+                              log(response.toString());
+                              if (response.statusCode == 200) {
+                                if (response.data["message"] ==
+                                    "playlist successfully created") {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Playlist successfully created'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+
+                                  context.go('/home');
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed to create playlist'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 5.0, vertical: 5),

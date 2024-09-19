@@ -1,109 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/providers/playlist_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playlistNotifier = ref.read(playlistProvider.notifier);
+
     return Scaffold(
       backgroundColor: const Color(0xff111111),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Title(
+        title: const CustomTitle(
           title: "shared playlists",
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: Stack(
-        children: [
-          SizedBox(
-            height: double.maxFinite,
-            width: double.maxFinite,
-            child: SvgPicture.asset(
-              'assets/bg.svg',
-              colorFilter:
-                  const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
-              fit: BoxFit.cover,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await playlistNotifier.fetchPlaylists();
+        },
+        child: Stack(
+          children: [
+            SizedBox(
+              height: double.maxFinite,
+              width: double.maxFinite,
+              child: SvgPicture.asset(
+                'assets/bg.svg',
+                colorFilter:
+                    const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Create new Playlist ·",
-                  style: TextStyle(
-                    fontFamily: "Gotham",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Create new Playlist ·",
+                    style: TextStyle(
+                      fontFamily: "Gotham",
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                InkWell(
+                  const SizedBox(height: 10),
+                  InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     onTap: () => context.go('/create'),
-                    child: const NewPlaylistButton()),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Active ·",
-                  style: TextStyle(
-                    fontFamily: "Gotham",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                    child: Ink(child: const NewPlaylistButton()),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const PlaylistCard(
-                  isActive: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Recent ·",
-                  style: TextStyle(
-                    fontFamily: "Gotham",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Active ·",
+                    style: TextStyle(
+                      fontFamily: "Gotham",
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const PlaylistCard(
-                  name: "WomenTechies' 24",
-                  participants: 234,
-                  img: "assets/wt.png",
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const PlaylistCard(
-                  name: "Hexathon' 23",
-                  participants: 1200,
-                  img: "assets/hexathon.png",
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  FutureBuilder(
+                    future: playlistNotifier.fetchPlaylists(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Failed to load playlists.'));
+                      } else {
+                        final playlists = ref.watch(playlistProvider);
+                        return Expanded(
+                          child: ListView.builder(
+                            itemCount: playlists.length,
+                            itemBuilder: (context, index) {
+                              final playlist = playlists[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: PlaylistCard(
+                                  name: playlist.name,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class Title extends StatelessWidget {
-  const Title({
+class CustomTitle extends StatelessWidget {
+  const CustomTitle({
     super.key,
     required this.title,
   });
@@ -115,27 +115,22 @@ class Title extends StatelessWidget {
     return Row(
       children: [
         const Spacer(),
-        const SizedBox(
-          width: 20,
-        ),
+        const SizedBox(width: 20),
         Text(
           title,
           style: const TextStyle(
-              fontFamily: "Gotham",
-              fontWeight: FontWeight.w700,
-              fontSize: 34,
-              shadows: <Shadow>[
-                Shadow(offset: Offset(0, 1), color: Color(0xffDA84FE))
-              ]),
+            fontFamily: "Gotham",
+            fontWeight: FontWeight.w700,
+            fontSize: 34,
+            shadows: <Shadow>[
+              Shadow(offset: Offset(0, 1), color: Color(0xffDA84FE)),
+            ],
+          ),
         ),
         Column(
           children: [
-            SvgPicture.asset(
-              'assets/highlight.svg',
-            ),
-            const SizedBox(
-              height: 30,
-            ),
+            SvgPicture.asset('assets/highlight.svg'),
+            const SizedBox(height: 30),
           ],
         ),
         const Spacer(),
@@ -145,17 +140,14 @@ class Title extends StatelessWidget {
 }
 
 class PlaylistCard extends StatelessWidget {
-  const PlaylistCard(
-      {super.key,
-      this.isActive = false,
-      this.name = "DevJams' 24",
-      this.participants = 587,
-      this.img = "assets/dino.png"});
+  const PlaylistCard({
+    super.key,
+    this.isActive = false,
+    required this.name,
+  });
 
   final bool isActive;
   final String name;
-  final int participants;
-  final String img;
 
   @override
   Widget build(BuildContext context) {
@@ -163,70 +155,40 @@ class PlaylistCard extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-              height: 102,
-              decoration: BoxDecoration(
-                  color: isActive ? const Color(0xff5822EE) : Colors.white,
-                  borderRadius: const BorderRadius.all(Radius.circular(8))),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Stack(children: [
-                  Row(
+            height: 102,
+            decoration: BoxDecoration(
+              color: isActive ? const Color(0xff5822EE) : Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: [
+                  Container(
+                    height: 57,
+                    width: 57,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                    child: const Icon(Icons.music_note, size: 32),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 57,
-                        width: 57,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(img), fit: BoxFit.cover),
-                          shape: BoxShape.circle,
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontFamily: "Gotham",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: isActive ? Colors.white : Colors.black,
                         ),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: TextStyle(
-                                fontFamily: "Gotham",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                                color: !isActive
-                                    ? const Color.fromARGB(255, 0, 0, 0)
-                                    : Colors.white),
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.people_alt_outlined,
-                                size: 19,
-                                color: !isActive
-                                    ? const Color(0xff000000)
-                                    : Colors.white,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                participants.toString(),
-                                style: TextStyle(
-                                  fontFamily: "Gotham",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: !isActive
-                                      ? const Color(0xff000000)
-                                      : Colors.white,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      const Spacer(),
                     ],
                   ),
+                  const Spacer(),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
@@ -252,9 +214,11 @@ class PlaylistCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
-                ]),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -262,9 +226,7 @@ class PlaylistCard extends StatelessWidget {
 }
 
 class NewPlaylistButton extends StatelessWidget {
-  const NewPlaylistButton({
-    super.key,
-  });
+  const NewPlaylistButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -274,8 +236,9 @@ class NewPlaylistButton extends StatelessWidget {
           child: Container(
             height: 59,
             decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
             child: const Icon(
               Icons.add_circle,
               color: Color(0xff5822EE),

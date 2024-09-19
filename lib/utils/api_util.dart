@@ -56,3 +56,5 @@ class ApiUtil {
     }
   }
 }
+
+ApiUtil apiUtil = ApiUtil();
