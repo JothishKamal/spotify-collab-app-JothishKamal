@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,12 +29,12 @@ class HomeScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(32.0),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Create new Playlist ·",
                   style: TextStyle(
                     fontFamily: "Gotham",
@@ -41,14 +42,17 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                NewPlaylistButton(),
-                SizedBox(
+                InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    onTap: () => context.go('/create'),
+                    child: const NewPlaylistButton()),
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "Active ·",
                   style: TextStyle(
                     fontFamily: "Gotham",
@@ -56,16 +60,16 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                PlaylistCard(
+                const PlaylistCard(
                   isActive: true,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "Recent ·",
                   style: TextStyle(
                     fontFamily: "Gotham",
@@ -73,18 +77,18 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                PlaylistCard(
+                const PlaylistCard(
                   name: "WomenTechies' 24",
                   participants: 234,
                   img: "assets/wt.png",
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
-                PlaylistCard(
+                const PlaylistCard(
                   name: "Hexathon' 23",
                   participants: 1200,
                   img: "assets/hexathon.png",
