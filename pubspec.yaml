@@ -42,6 +42,7 @@ dependencies:
   url_launcher: ^6.3.0
   shared_preferences: ^2.3.2
   dio: ^5.7.0
+  text_marquee: ^0.0.2
 
 dev_dependencies:
   flutter_test:

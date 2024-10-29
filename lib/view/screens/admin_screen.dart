@@ -2,7 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/providers/admin_screen_provider.dart';
+import 'package:spotify_collab_app/providers/playlist_provider.dart';
 
 class AdminScreen extends ConsumerStatefulWidget {
   const AdminScreen({super.key});
@@ -42,6 +44,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
 
     final currentIndex = ref.watch(tabProvider);
     final requestAction = ref.watch(requestActionProvider);
+    final playlistNotifier = ref.read(playlistProvider.notifier);
 
     final List<Map<String, String>> items = [
       {
@@ -55,6 +58,8 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
         "imageUrl": "assets/Chanel.png",
       },
     ];
+
+    // final List<Map<String, String>> items = playlistNotifier.fetchSongs();
 
     final participants = [
       "Souvik",
@@ -76,7 +81,9 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
             centerTitle: false,
             automaticallyImplyLeading: false,
             title: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pop();
+              },
               iconSize: 16,
               icon: const Icon(
                 Icons.arrow_back_ios,
@@ -153,15 +160,6 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                               ),
                             ),
                           ),
-                          Tab(
-                            child: Text(
-                              "Participants",
-                              style: TextStyle(
-                                fontFamily: 'Gotham',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -174,9 +172,8 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                         controller: _tabController,
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
-                          buildTabContent(items, isPlaylist: true),
+                          buildTabContent(playlistNotifier, isPlaylist: true),
                           buildRequestTabContent(items, requestAction),
-                          buildTabContent(participants, isParticipant: true),
                         ],
                       ),
                     ),
@@ -209,61 +206,61 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
     );
   }
 
-  Widget buildTabContent(List<dynamic> items,
+  Widget buildTabContent(PlaylistNotifier playlistNotifier,
       {bool isPlaylist = false,
       bool isRequest = false,
       bool isParticipant = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Column(
-        children: [
-          if (isParticipant)
-            Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                'Total Participants - ${items.length}',
-                style: const TextStyle(
-                  fontFamily: 'Gotham',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 12,
-                ),
+    FutureBuilder(
+        future:
+            playlistNotifier.fetchSongs("b65673a0-21ae-4dd6-a7f5-5ec6c204b731"),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Failed to load playlists.'));
+          } else {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Column(
+                children: [
+                  const SizedBox(),
+                  Text("Works!")
+                  // Expanded(
+                  //   child: ListView.separated(
+                  //     itemCount: items.length,
+                  //     separatorBuilder: (context, index) => const Divider(
+                  //       color: Color(0xFFCCCCCC),
+                  //       height: 1,
+                  //     ),
+                  //     itemBuilder: (context, index) {
+                  //       final item = items[index];
+                  //       return isPlaylist
+                  //           ? MusicListItem(
+                  //               title: item["title"]!,
+                  //               subtitle: item["subtitle"]!,
+                  //               imageUrl: item["imageUrl"]!,
+                  //               isPlaylist: isPlaylist,
+                  //               isRequest: isRequest,
+                  //               isParticipant: isParticipant,
+                  //             )
+                  //           : MusicListItem(
+                  //               title: item!,
+                  //               subtitle: null,
+                  //               imageUrl: null,
+                  //               isPlaylist: isPlaylist,
+                  //               isRequest: isRequest,
+                  //               isParticipant: isParticipant,
+                  //             );
+                  //     },
+                  //   ),
+                  // ),
+                ],
               ),
-            )
-          else
-            const SizedBox(),
-          Expanded(
-            child: ListView.separated(
-              itemCount: items.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Color(0xFFCCCCCC),
-                height: 1,
-              ),
-              itemBuilder: (context, index) {
-                final item = items[index];
-                return isPlaylist
-                    ? MusicListItem(
-                        title: item["title"]!,
-                        subtitle: item["subtitle"]!,
-                        imageUrl: item["imageUrl"]!,
-                        isPlaylist: isPlaylist,
-                        isRequest: isRequest,
-                        isParticipant: isParticipant,
-                      )
-                    : MusicListItem(
-                        title: item!,
-                        subtitle: null,
-                        imageUrl: null,
-                        isPlaylist: isPlaylist,
-                        isRequest: isRequest,
-                        isParticipant: isParticipant,
-                      );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+            );
+          }
+        });
+        return const SizedBox();
   }
 
   Widget buildRequestTabContent(

@@ -29,9 +29,9 @@ class ApiUtil {
     baseUrl: devUrl,
   ));
 
-  Future<Response> get(String endpoint) async {
+  Future<Response> get(String endpoint, [Map<String, dynamic>? data]) async {
     try {
-      Response response = await dio.get(endpoint);
+      Response response = await dio.get(endpoint, data: data);
       return response;
     } catch (e) {
       throw Exception('Failed to load data: $e');

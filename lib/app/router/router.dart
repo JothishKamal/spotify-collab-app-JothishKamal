@@ -9,6 +9,7 @@ import 'package:spotify_collab_app/view/screens/signup_screen.dart';
 import 'package:spotify_collab_app/view/screens/home_screen.dart';
 import 'package:spotify_collab_app/view/screens/connect_screen.dart';
 import 'package:spotify_collab_app/view/screens/splash_screen.dart';
+import 'package:spotify_collab_app/view/screens/yay_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(

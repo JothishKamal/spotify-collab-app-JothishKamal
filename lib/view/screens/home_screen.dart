@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/providers/playlist_provider.dart';
+import 'package:spotify_collab_app/view/screens/admin_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -75,6 +76,9 @@ class HomeScreen extends ConsumerWidget {
                             child: Text('Failed to load playlists.'));
                       } else {
                         final playlists = ref.watch(playlistProvider);
+                        if (playlists.isEmpty)
+                          return const Center(
+                              child: Text('No playlists found'));
                         return Expanded(
                           child: ListView.builder(
                             itemCount: playlists.length,
@@ -201,18 +205,22 @@ class PlaylistCard extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(8)),
                       ),
                       child: Center(
-                        child: Text(
-                          isActive ? "Manage" : "View",
-                          style: TextStyle(
-                            color: isActive
-                                ? const Color(0xff5822EE)
-                                : Colors.white,
-                            fontFamily: "Gotham",
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
+                        child: TextButton(
+                          onPressed: () {
+                            context.push("/admin");
+                          },
+                          child: Text(
+                            isActive ? "Manage" : "View",
+                            style: TextStyle(
+                              color: isActive
+                                  ? const Color(0xff5822EE)
+                                  : Colors.white,
+                              fontFamily: "Gotham",
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
                           ),
                         ),
-                      ),
+                      )),
                     ),
                   ),
                 ],

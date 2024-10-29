@@ -35,4 +35,17 @@ class PlaylistNotifier extends StateNotifier<List<Playlist>> {
       }
     }
   }
+
+  Future<void> fetchSongs(String uuid) async {
+    final response = await apiUtil.get('/v1/songs', {"playlist_uuid": uuid});
+    log(response.data.toString());
+    if (response.statusCode == 200) {
+      if (response.data["message"] == "Songs successfully retrieved") {
+        final songs = (response.data["data"]["accepted"] as List)
+            .map((data) => Playlist.fromJson(data))
+            .toList();
+        state = songs;
+      }
+    }
+  }
 }
