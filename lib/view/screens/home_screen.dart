@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/providers/playlist_provider.dart';
-import 'package:spotify_collab_app/view/screens/admin_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -76,9 +75,10 @@ class HomeScreen extends ConsumerWidget {
                             child: Text('Failed to load playlists.'));
                       } else {
                         final playlists = ref.watch(playlistProvider);
-                        if (playlists.isEmpty)
+                        if (playlists.isEmpty) {
                           return const Center(
                               child: Text('No playlists found'));
+                        }
                         return Expanded(
                           child: ListView.builder(
                             itemCount: playlists.length,
@@ -87,8 +87,8 @@ class HomeScreen extends ConsumerWidget {
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: PlaylistCard(
-                                  name: playlist.name,
-                                ),
+                                    name: playlist.name,
+                                    id: playlist.playlistUuid),
                               );
                             },
                           ),
@@ -143,18 +143,22 @@ class CustomTitle extends StatelessWidget {
   }
 }
 
-class PlaylistCard extends StatelessWidget {
+class PlaylistCard extends ConsumerWidget {
   const PlaylistCard({
     super.key,
     this.isActive = false,
     required this.name,
+    required this.id,
   });
 
   final bool isActive;
-  final String name;
+  final String? name;
+  final String? id;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playlistNotifier = ref.read(playlistProvider.notifier);
+
     return Row(
       children: [
         Expanded(
@@ -182,7 +186,7 @@ class PlaylistCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        name ?? '',
                         style: TextStyle(
                           fontFamily: "Gotham",
                           fontWeight: FontWeight.w700,
@@ -205,19 +209,21 @@ class PlaylistCard extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(8)),
                       ),
                       child: Center(
-                        child: TextButton(
-                          onPressed: () {
-                            context.push("/admin");
-                          },
-                          child: Text(
-                            isActive ? "Manage" : "View",
-                            style: TextStyle(
-                              color: isActive
-                                  ? const Color(0xff5822EE)
-                                  : Colors.white,
-                              fontFamily: "Gotham",
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
+                          child: TextButton(
+                        onPressed: () {
+                          playlistNotifier.selectedPlaylistUuid = id ?? '';
+                          playlistNotifier.selectedPlaylistName = name ?? '';
+                          context.push("/admin");
+                        },
+                        child: Text(
+                          isActive ? "Manage" : "View",
+                          style: TextStyle(
+                            color: isActive
+                                ? const Color(0xff5822EE)
+                                : Colors.white,
+                            fontFamily: "Gotham",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
                           ),
                         ),
                       )),

@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify_collab_app/utils/api_util.dart';
+import 'package:spotify_collab_app/view/models/playlist_success_response.dart';
 
 final playlistProvider =
     StateNotifierProvider<PlaylistNotifier, List<Playlist>>((ref) {
@@ -9,13 +11,15 @@ final playlistProvider =
 });
 
 class Playlist {
-  final String name;
+  final String? name;
+  final String? playlistUuid;
 
-  Playlist({required this.name});
+  Playlist({required this.name, this.playlistUuid});
 
   factory Playlist.fromJson(Map<String, dynamic> json) {
     return Playlist(
       name: json['name'],
+      playlistUuid: json['playlist_uuid'],
     );
   }
 }
@@ -23,29 +27,34 @@ class Playlist {
 class PlaylistNotifier extends StateNotifier<List<Playlist>> {
   PlaylistNotifier() : super([]);
 
+  String? selectedPlaylistUuid;
+  String? selectedPlaylistName;
+
   Future<void> fetchPlaylists() async {
     final response = await apiUtil.get('/v1/playlists');
-    log(response.data.toString());
+
     if (response.statusCode == 200) {
-      if (response.data["message"] == "Playlists successfully retrieved") {
-        final playlists = (response.data["data"] as List)
-            .map((data) => Playlist.fromJson(data))
-            .toList();
+      final playlistResponse = PlaylistSuccessResponse.fromJson(response.data);
+
+      if (playlistResponse.message == "Playlists successfully retrieved") {
+        final playlists = playlistResponse.data
+                ?.map((data) => Playlist(
+                      name: data.name,
+                      playlistUuid: data.playlistUuid,
+                    ))
+                .toList() ??
+            [];
+
         state = playlists;
       }
     }
   }
 
-  Future<void> fetchSongs(String uuid) async {
-    final response = await apiUtil.get('/v1/songs', {"playlist_uuid": uuid});
-    log(response.data.toString());
-    if (response.statusCode == 200) {
-      if (response.data["message"] == "Songs successfully retrieved") {
-        final songs = (response.data["data"]["accepted"] as List)
-            .map((data) => Playlist.fromJson(data))
-            .toList();
-        state = songs;
-      }
-    }
+  void selectPlaylist(String uuid) {
+    selectedPlaylistUuid = uuid;
+  }
+
+  void selectPlaylistName(String name) {
+    selectedPlaylistName = name;
   }
 }

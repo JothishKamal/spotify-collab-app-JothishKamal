@@ -33,6 +33,7 @@ class ConnectScreenState extends ConsumerState<ConnectScreen> {
           log('Access Token: $accessToken');
 
           ref.read(authProvider.notifier).setAccessToken(accessToken);
+          if (!mounted) return;
           context.replace('/home');
         } else {
           log('No access token found');
@@ -173,4 +174,3 @@ class ConnectScreenState extends ConsumerState<ConnectScreen> {
     );
   }
 }
-

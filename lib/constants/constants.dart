@@ -1,1 +1,2 @@
-const devUrl = 'https://spotify-collab-backend-w7av.onrender.com';
+const devUrl =
+    'https://spotify-collab-backend-jothishkamal.onrender.com';
