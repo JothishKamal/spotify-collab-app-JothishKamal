@@ -2,17 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotify_collab_app/providers/admin_screen_provider.dart';
+import 'package:spotify_collab_app/providers/playlist_provider.dart';
 
 class MusicListItem extends ConsumerWidget {
+  final String? id;
   final String title;
   final String? subtitle;
   final String? imageUrl;
   final bool isPlaylist;
   final bool isRequest;
   final bool isParticipant;
-
   const MusicListItem({
     super.key,
+    required this.id,
     required this.title,
     this.subtitle,
     this.imageUrl,
@@ -33,6 +36,8 @@ class MusicListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final songsNotifier = ref.read(songsProvider.notifier);
+    final playlistsProvider = ref.watch(playlistProvider.notifier);
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       leading: isParticipant
@@ -99,12 +104,55 @@ class MusicListItem extends ConsumerWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: () {},
+                  onPressed: () async {
+                    final success = await songsNotifier.rejectSong(
+                        playlistsProvider.selectedPlaylistUuid!, id!);
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            success ? 'Song rejected' : 'Failed to reject song',
+                            style: const TextStyle(
+                              fontFamily: 'Gotham',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          backgroundColor: success
+                              ? Colors.green
+                              : Colors.red.withOpacity(0.8),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.check, color: Colors.green),
-                  onPressed: () {},
-                ),
+                    icon: const Icon(Icons.check, color: Colors.green),
+                    onPressed: () async {
+                      final success = await songsNotifier.acceptSong(
+                          playlistsProvider.selectedPlaylistUuid!, id!);
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              success
+                                  ? 'Song accepted'
+                                  : 'Failed to accept song',
+                              style: const TextStyle(
+                                fontFamily: 'Gotham',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                            backgroundColor: success
+                                ? Colors.green
+                                : Colors.red.withOpacity(0.8),
+                          ),
+                        );
+                      }
+                    }),
               ],
             )
           : isParticipant

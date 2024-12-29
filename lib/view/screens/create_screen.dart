@@ -138,7 +138,15 @@ class CreateScreen extends ConsumerWidget {
                             if (eventNameController.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Event name cannot be empty'),
+                                  content: Text(
+                                    'Event name cannot be empty',
+                                    style: TextStyle(
+                                      fontFamily: 'Gotham',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -151,10 +159,18 @@ class CreateScreen extends ConsumerWidget {
                               if (response.statusCode == 200) {
                                 if (response.data["message"] ==
                                     "playlist successfully created") {
+                                  if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text('Playlist successfully created'),
+                                      content: Text(
+                                        'Playlist successfully created',
+                                        style: TextStyle(
+                                          fontFamily: 'Gotham',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                       backgroundColor: Colors.green,
                                     ),
                                   );
@@ -162,10 +178,20 @@ class CreateScreen extends ConsumerWidget {
                                   context.go('/home');
                                 }
                               } else {
+                                if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Failed to create playlist'),
-                                    backgroundColor: Colors.red,
+                                  SnackBar(
+                                    content: const Text(
+                                      'Failed to create playlist',
+                                      style: TextStyle(
+                                        fontFamily: 'Gotham',
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    backgroundColor:
+                                        Colors.red.withOpacity(0.8),
                                   ),
                                 );
                               }

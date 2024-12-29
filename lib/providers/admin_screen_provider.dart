@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,5 +54,47 @@ class SongsNotifier extends StateNotifier<SongsResponse> {
       statusCode: emptySongs.statusCode,
       success: emptySongs.success,
     );
+  }
+
+  Future<bool> acceptSong(String uuid, String uri) async {
+    try {
+      final response = await apiUtil.post(
+        '/v1/songs/accept',
+        {
+          'playlist_uuid': uuid,
+          'song_uri': uri,
+        },
+      );
+
+      log('Song accepted');
+      if (response.statusCode == 200) {
+        fetchSongs(uuid);
+        return true;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> rejectSong(String uuid, String uri) async {
+    try {
+      final response = await apiUtil.post(
+        '/v1/songs/reject',
+        {
+          'playlist_uuid': uuid,
+          'song_uri': uri,
+        },
+      );
+
+      log('Song rejected');
+      if (response.statusCode == 200) {
+        fetchSongs(uuid);
+        return true;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return false;
   }
 }

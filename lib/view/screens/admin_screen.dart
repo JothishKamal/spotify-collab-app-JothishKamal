@@ -39,8 +39,6 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
   Future<void> _fetchSongs() async {
     final playlistNotifier = ref.read(playlistProvider.notifier);
     final songsNotifier = ref.read(songsProvider.notifier);
-    await playlistNotifier.fetchPlaylists();
-    await songsNotifier.fetchSongs(playlistNotifier.selectedPlaylistUuid!);
 
     try {
       await songsNotifier.fetchSongs(playlistNotifier.selectedPlaylistUuid!);
@@ -225,7 +223,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
     return (items.isEmpty)
         ? const Center(
             child: Text(
-              "No songs",
+              "No songs in playlist.",
               style: TextStyle(
                 fontFamily: 'Gotham',
                 color: Colors.white,
@@ -250,6 +248,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                       final item = items[index];
                       return isPlaylist
                           ? MusicListItem(
+                              id: item.track!.track!.id!,
                               title: item.track!.track!.name!,
                               subtitle: item.track!.track!.artists!
                                   .map((artist) => artist.name!)
@@ -261,6 +260,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                               isParticipant: isParticipant,
                             )
                           : MusicListItem(
+                              id: item.track!.track!.id!,
                               title: item.track!.track!.album!.name!,
                               subtitle: null,
                               imageUrl: null,
@@ -351,6 +351,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                   itemBuilder: (context, index) {
                     final item = items[index];
                     return MusicListItem(
+                      id: item.id!,
                       title: item.name!,
                       subtitle: item.artists!
                           .map((artist) => artist.name!)

@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:spotify_collab_app/constants/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:text_marquee/text_marquee.dart';
 
 class YayScreen extends ConsumerStatefulWidget {
@@ -25,11 +23,6 @@ class ConnectScreenState extends ConsumerState<YayScreen> {
   void dispose() {
     _sub?.cancel();
     super.dispose();
-  }
-
-  Future<void> _launchSpotifyLogin() async {
-    const url = '$devUrl/v1/auth/spotify/login/app';
-    launchUrl(Uri.parse(url));
   }
 
   @override
@@ -117,7 +110,7 @@ class PlaylistCard extends StatelessWidget {
       this.isActive = false,
       this.name = "DevJams' 24",
       this.host = "Souvik",
-      this.img = "assets/dino.png"});
+      this.img = "assets/dino.png", String? id});
 
   final bool isActive;
   final String name;
@@ -163,7 +156,9 @@ class PlaylistCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Row(children: [
                             const Text(
                               "Event:",
