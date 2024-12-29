@@ -1,15 +1,81 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/constants/constants.dart';
+import 'package:spotify_collab_app/providers/auth_provider.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ConnectScreen extends StatelessWidget {
+class ConnectScreen extends ConsumerStatefulWidget {
   const ConnectScreen({super.key});
+
+  @override
+  ConnectScreenState createState() => ConnectScreenState();
+}
+
+class ConnectScreenState extends ConsumerState<ConnectScreen> {
+  StreamSubscription? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _initUniLinks();
+  }
+
+  Future<void> _initUniLinks() async {
+    _sub = uriLinkStream.listen((Uri? uri) {
+      if (uri != null) {
+        final accessToken = uri.queryParameters['token'];
+        if (accessToken != null) {
+          log('Access Token: $accessToken');
+
+          ref.read(authProvider.notifier).setAccessToken(accessToken);
+          if (!mounted) return;
+          context.replace('/home');
+        } else {
+          log('No access token found');
+        }
+      }
+    }, onError: (err) {
+      log('Error in listening to URI links: $err');
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _launchSpotifyLogin() async {
+    const url = '$devUrl/v1/auth/spotify/login/app';
+    launchUrl(Uri.parse(url));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff5822EE),
       appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Connect To Spotify',
+          style: TextStyle(
+            fontFamily: 'Gotham',
+            shadows: <Shadow>[
+              Shadow(
+                color: Color(0xff000000),
+                offset: Offset(0, 3),
+              ),
+            ],
+            fontSize: 30,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
+        ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
       ),
@@ -28,7 +94,7 @@ class ConnectScreen extends StatelessWidget {
             children: [
               const Spacer(),
               const Text(
-                "welcome to collabify",
+                "Welcome To Collabify",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: "Gotham",
@@ -53,30 +119,36 @@ class ConnectScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xff1db954),
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-                height: 45,
-                width: 225,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Connect",
-                      style: TextStyle(
-                        fontFamily: "Gotham",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
+              InkWell(
+                onTap: () {
+                  _launchSpotifyLogin();
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xff1db954),
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  height: 45,
+                  width: 225,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Connect",
+                        style: TextStyle(
+                          fontFamily: "Gotham",
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    SvgPicture.asset("assets/logo.svg")
-                  ],
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SvgPicture.asset("assets/logo.svg")
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(

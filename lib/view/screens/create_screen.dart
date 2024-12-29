@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:spotify_collab_app/utils/api_util.dart';
 import 'package:spotify_collab_app/view/widgets/background_widget.dart';
 import 'package:spotify_collab_app/view/widgets/custom_text_field.dart';
 import 'package:spotify_collab_app/providers/photo_upload_notifier.dart';
@@ -35,7 +40,7 @@ class CreateScreen extends ConsumerWidget {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => context.go('/home'),
                       icon: const Icon(Icons.arrow_back_ios),
                       color: const Color(0xff5822EE),
                     ),
@@ -129,7 +134,69 @@ class CreateScreen extends ConsumerWidget {
                               const Color(0xff5822EE),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (eventNameController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Event name cannot be empty',
+                                    style: TextStyle(
+                                      fontFamily: 'Gotham',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            } else {
+                              Response<dynamic> response =
+                                  await apiUtil.post('/v1/playlists', {
+                                'name': eventNameController.text,
+                              });
+                              log(response.toString());
+                              if (response.statusCode == 200) {
+                                if (response.data["message"] ==
+                                    "playlist successfully created") {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Playlist successfully created',
+                                        style: TextStyle(
+                                          fontFamily: 'Gotham',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+
+                                  context.go('/home');
+                                }
+                              } else {
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text(
+                                      'Failed to create playlist',
+                                      style: TextStyle(
+                                        fontFamily: 'Gotham',
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    backgroundColor:
+                                        Colors.red.withOpacity(0.8),
+                                  ),
+                                );
+                              }
+                            }
+                          },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 5.0, vertical: 5),

@@ -1,8 +1,13 @@
-import 'dart:math';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/providers/admin_screen_provider.dart';
+import 'package:spotify_collab_app/providers/playlist_provider.dart';
+import 'package:spotify_collab_app/view/models/songs_response.dart' as songs;
+import 'package:spotify_collab_app/view/widgets/music_list_item.dart';
 
 class AdminScreen extends ConsumerStatefulWidget {
   const AdminScreen({super.key});
@@ -14,19 +19,36 @@ class AdminScreen extends ConsumerStatefulWidget {
 class _AdminScreenState extends ConsumerState<AdminScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _fetchSongs();
     final initialIndex = ref.read(tabProvider);
     _tabController =
-        TabController(length: 3, vsync: this, initialIndex: initialIndex);
+        TabController(length: 2, vsync: this, initialIndex: initialIndex);
 
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         ref.read(tabProvider.notifier).state = _tabController.index;
       }
     });
+  }
+
+  Future<void> _fetchSongs() async {
+    final playlistNotifier = ref.read(playlistProvider.notifier);
+    final songsNotifier = ref.read(songsProvider.notifier);
+
+    try {
+      await songsNotifier.fetchSongs(playlistNotifier.selectedPlaylistUuid!);
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -42,27 +64,8 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
 
     final currentIndex = ref.watch(tabProvider);
     final requestAction = ref.watch(requestActionProvider);
+    final songsData = ref.watch(songsProvider);
 
-    final List<Map<String, String>> items = [
-      {
-        "title": "One of Wun",
-        "subtitle": "Gunna",
-        "imageUrl": "assets/OneOfWun.png",
-      },
-      {
-        "title": "Chanel",
-        "subtitle": "Frank Ocean",
-        "imageUrl": "assets/Chanel.png",
-      },
-    ];
-
-    final participants = [
-      "Souvik",
-      "Jothish",
-      "Aakaash",
-      "Aditya",
-      "Karan",
-    ];
     if (_tabController.index != currentIndex) {
       _tabController.animateTo(currentIndex);
     }
@@ -76,7 +79,9 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
             centerTitle: false,
             automaticallyImplyLeading: false,
             title: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pop();
+              },
               iconSize: 16,
               icon: const Icon(
                 Icons.arrow_back_ios,
@@ -101,11 +106,11 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                 padding: EdgeInsets.only(
                   top: height * 0.03,
                 ),
-                child: const Align(
+                child: Align(
                   alignment: Alignment.topCenter,
                   child: Text(
-                    "DevJams’ 24",
-                    style: TextStyle(
+                    ref.watch(playlistProvider.notifier).selectedPlaylistName!,
+                    style: const TextStyle(
                       fontFamily: 'Gotham',
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -117,7 +122,12 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
               Container(
                 margin: EdgeInsets.only(top: height * 0.12),
                 decoration: const BoxDecoration(
-                  color: Color.fromRGBO(12, 13, 14, 1),
+                  color: Color.fromRGBO(
+                    12,
+                    13,
+                    14,
+                    1,
+                  ),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
@@ -126,59 +136,56 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                 child: Column(
                   children: [
                     SizedBox(height: height * 0.02),
-                    Padding(
-                      padding: EdgeInsets.only(right: width * 0.138),
-                      child: TabBar(
-                        controller: _tabController,
-                        indicatorColor: const Color(0xffF674A2),
-                        labelColor: Colors.white,
-                        dividerColor: Colors.transparent,
-                        unselectedLabelColor: Colors.grey,
-                        tabs: const [
-                          Tab(
-                            child: Text(
-                              "Playlist",
-                              style: TextStyle(
-                                fontFamily: 'Gotham',
-                                fontWeight: FontWeight.w600,
-                              ),
+                    TabBar(
+                      controller: _tabController,
+                      indicatorColor: const Color(0xffF674A2),
+                      labelColor: Colors.white,
+                      dividerColor: Colors.transparent,
+                      unselectedLabelColor: Colors.grey,
+                      tabs: const [
+                        Tab(
+                          child: Text(
+                            "Playlist",
+                            style: TextStyle(
+                              fontFamily: 'Gotham',
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Tab(
-                            child: Text(
-                              "Requests",
-                              style: TextStyle(
-                                fontFamily: 'Gotham',
-                                fontWeight: FontWeight.w600,
-                              ),
+                        ),
+                        Tab(
+                          child: Text(
+                            "Requests",
+                            style: TextStyle(
+                              fontFamily: 'Gotham',
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Tab(
-                            child: Text(
-                              "Participants",
-                              style: TextStyle(
-                                fontFamily: 'Gotham',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     const Divider(
                       color: Color(0xffCCCCCC),
                       height: 1,
                     ),
                     Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          buildTabContent(items, isPlaylist: true),
-                          buildRequestTabContent(items, requestAction),
-                          buildTabContent(participants, isParticipant: true),
-                        ],
-                      ),
+                      child: (_isLoading)
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : TabBarView(
+                              controller: _tabController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                buildTabContent(
+                                  songsData.data!.accepted!,
+                                  isPlaylist: true,
+                                ),
+                                buildRequestTabContent(
+                                  songsData.data!.submitted!,
+                                  requestAction,
+                                ),
+                              ],
+                            ),
                     ),
                   ],
                 ),
@@ -209,249 +216,153 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
     );
   }
 
-  Widget buildTabContent(List<dynamic> items,
+  Widget buildTabContent(List<songs.Accepted> items,
       {bool isPlaylist = false,
       bool isRequest = false,
       bool isParticipant = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Column(
-        children: [
-          if (isParticipant)
-            Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                'Total Participants - ${items.length}',
-                style: const TextStyle(
-                  fontFamily: 'Gotham',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 12,
-                ),
+    return (items.isEmpty)
+        ? const Center(
+            child: Text(
+              "No songs in playlist.",
+              style: TextStyle(
+                fontFamily: 'Gotham',
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
               ),
-            )
-          else
-            const SizedBox(),
-          Expanded(
-            child: ListView.separated(
-              itemCount: items.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Color(0xFFCCCCCC),
-                height: 1,
-              ),
-              itemBuilder: (context, index) {
-                final item = items[index];
-                return isPlaylist
-                    ? MusicListItem(
-                        title: item["title"]!,
-                        subtitle: item["subtitle"]!,
-                        imageUrl: item["imageUrl"]!,
-                        isPlaylist: isPlaylist,
-                        isRequest: isRequest,
-                        isParticipant: isParticipant,
-                      )
-                    : MusicListItem(
-                        title: item!,
-                        subtitle: null,
-                        imageUrl: null,
-                        isPlaylist: isPlaylist,
-                        isRequest: isRequest,
-                        isParticipant: isParticipant,
-                      );
-              },
             ),
-          ),
-        ],
-      ),
-    );
+          )
+        : Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: items.length,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: Color(0xFFCCCCCC),
+                      height: 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return isPlaylist
+                          ? MusicListItem(
+                              id: item.track!.track!.id!,
+                              title: item.track!.track!.name!,
+                              subtitle: item.track!.track!.artists!
+                                  .map((artist) => artist.name!)
+                                  .join(', '),
+                              imageUrl:
+                                  item.track!.track!.album!.images![0].url!,
+                              isPlaylist: isPlaylist,
+                              isRequest: isRequest,
+                              isParticipant: isParticipant,
+                            )
+                          : MusicListItem(
+                              id: item.track!.track!.id!,
+                              title: item.track!.track!.album!.name!,
+                              subtitle: null,
+                              imageUrl: null,
+                              isPlaylist: isPlaylist,
+                              isRequest: isRequest,
+                              isParticipant: isParticipant,
+                            );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 
   Widget buildRequestTabContent(
-      List<Map<String, String>> items, RequestAction action) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Radio<RequestAction>(
-                value: RequestAction.rejectAll,
-                groupValue: action,
-                onChanged: (value) =>
-                    ref.read(requestActionProvider.notifier).state = value!,
-                activeColor: Colors.red,
-                fillColor: const WidgetStatePropertyAll(Colors.red),
+      List<songs.Submitted> items, RequestAction action) {
+    return (items.isEmpty)
+        ? const Center(
+            child: Text(
+              "No requests",
+              style: TextStyle(
+                fontFamily: 'Gotham',
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
               ),
-              const Text(
-                "Reject All",
-                style: TextStyle(
-                  fontFamily: 'Gotham',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10,
+            ),
+          )
+        : Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Radio<RequestAction>(
+                        value: RequestAction.rejectAll,
+                        groupValue: action,
+                        onChanged: (value) => ref
+                            .read(requestActionProvider.notifier)
+                            .state = value!,
+                        activeColor: Colors.red,
+                        fillColor: const WidgetStatePropertyAll(Colors.red),
+                      ),
+                      const Text(
+                        "Reject All",
+                        style: TextStyle(
+                          fontFamily: 'Gotham',
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10,
+                        ),
+                      ),
+                      Radio<RequestAction>(
+                        value: RequestAction.acceptAll,
+                        groupValue: action,
+                        onChanged: (value) => ref
+                            .read(requestActionProvider.notifier)
+                            .state = value!,
+                        activeColor: Colors.green,
+                        fillColor: const WidgetStatePropertyAll(Colors.green),
+                      ),
+                      const Text(
+                        "Accept All",
+                        style: TextStyle(
+                          fontFamily: 'Gotham',
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Radio<RequestAction>(
-                value: RequestAction.acceptAll,
-                groupValue: action,
-                onChanged: (value) =>
-                    ref.read(requestActionProvider.notifier).state = value!,
-                activeColor: Colors.green,
-                fillColor: const WidgetStatePropertyAll(Colors.green),
-              ),
-              const Text(
-                "Accept All",
-                style: TextStyle(
-                  fontFamily: 'Gotham',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10,
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) => const Divider(
+                    color: Color(0xFFCCCCCC),
+                    height: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return MusicListItem(
+                      id: item.id!,
+                      title: item.name!,
+                      subtitle: item.artists!
+                          .map((artist) => artist.name!)
+                          .join(', '),
+                      imageUrl: item.album!.images![0].url!,
+                      isRequest: true,
+                    );
+                  },
                 ),
               ),
             ],
-          ),
-        ),
-        Expanded(
-          child: ListView.separated(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            itemCount: items.length,
-            separatorBuilder: (context, index) => const Divider(
-              color: Color(0xFFCCCCCC),
-              height: 1,
-            ),
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return MusicListItem(
-                title: item["title"]!,
-                subtitle: item["subtitle"]!,
-                imageUrl: item["imageUrl"]!,
-                isRequest: true,
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class MusicListItem extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final String? imageUrl;
-  final bool isPlaylist;
-  final bool isRequest;
-  final bool isParticipant;
-
-  const MusicListItem({
-    super.key,
-    required this.title,
-    this.subtitle,
-    this.imageUrl,
-    this.isPlaylist = false,
-    this.isRequest = false,
-    this.isParticipant = false,
-  });
-
-  Color getRandomColor() {
-    final Random random = Random();
-    return Color.fromARGB(
-      255,
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-      leading: isParticipant
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      getRandomColor(),
-                      Colors.black,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    title[0].toUpperCase(),
-                    style: TextStyle(
-                      color: const Color(0xFFFFFFFF).withOpacity(0.8),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Image.asset(
-                imageUrl!,
-              ),
-            ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontFamily: 'Gotham',
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-          fontSize: 14,
-        ),
-      ),
-      subtitle: isParticipant
-          ? null
-          : Text(
-              subtitle ?? '',
-              style: const TextStyle(
-                fontFamily: 'Gotham',
-                fontWeight: FontWeight.w300,
-                color: Colors.grey,
-                fontSize: 10,
-              ),
-            ),
-      trailing: isRequest
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.check, color: Colors.green),
-                  onPressed: () {},
-                ),
-              ],
-            )
-          : isParticipant
-              ? null
-              : InkWell(
-                  onTap: () {},
-                  child: InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.more_vert,
-                      color: Color(0xff737373),
-                    ),
-                  ),
-                ),
-    );
+          );
   }
 }
