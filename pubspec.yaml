@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.3.2
   dio: ^5.7.0
   text_marquee: ^0.0.2
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -191,7 +192,6 @@ flutter:
     - family: Product-Sans
       fonts:
         - asset: fonts/Product-Sans/Product-Sans-Regular.ttf
-      
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

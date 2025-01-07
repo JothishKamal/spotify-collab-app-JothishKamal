@@ -1,13 +1,9 @@
-import 'dart:developer';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spotify_collab_app/utils/api_util.dart';
-import 'package:spotify_collab_app/view/widgets/background_widget.dart';
+import 'package:spotify_collab_app/providers/create_screen_provider.dart';
 import 'package:spotify_collab_app/view/widgets/custom_text_field.dart';
 import 'package:spotify_collab_app/providers/photo_upload_notifier.dart';
 
@@ -19,15 +15,21 @@ class CreateScreen extends ConsumerWidget {
     double width = MediaQuery.sizeOf(context).width;
     double height = MediaQuery.sizeOf(context).height;
     final TextEditingController eventNameController = TextEditingController();
+    final createState = ref.watch(createScreenProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          BackgroundWidget(
-            width: width,
-            height: height,
-            color: Colors.white.withOpacity(0.35),
+          SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: SvgPicture.asset(
+              'assets/bg.svg',
+              colorFilter:
+                  const ColorFilter.mode(Color(0xffd1dfdb), BlendMode.srcIn),
+              fit: BoxFit.cover,
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
@@ -55,7 +57,7 @@ class CreateScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'new shared playlist',
+                        'New Shared Playlist',
                         style: TextStyle(
                           fontFamily: 'Gotham',
                           shadows: <Shadow>[
@@ -114,7 +116,7 @@ class CreateScreen extends ConsumerWidget {
                         height: height * 0.055,
                       ),
                       CustomTextField(
-                        labelText: 'event name',
+                        labelText: 'Event name',
                         obscureText: false,
                         textEditingController: eventNameController,
                       ),
@@ -134,80 +136,74 @@ class CreateScreen extends ConsumerWidget {
                               const Color(0xff5822EE),
                             ),
                           ),
-                          onPressed: () async {
-                            if (eventNameController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Event name cannot be empty',
-                                    style: TextStyle(
-                                      fontFamily: 'Gotham',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            } else {
-                              Response<dynamic> response =
-                                  await apiUtil.post('/v1/playlists', {
-                                'name': eventNameController.text,
-                              });
-                              log(response.toString());
-                              if (response.statusCode == 200) {
-                                if (response.data["message"] ==
-                                    "playlist successfully created") {
+                          onPressed: createState.isLoading
+                              ? null
+                              : () async {
+                                  if (eventNameController.text.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Event name cannot be empty',
+                                          style: TextStyle(
+                                            fontFamily: 'Gotham',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  final result = await ref
+                                      .read(createScreenProvider.notifier)
+                                      .createPlaylist(eventNameController.text);
+
                                   if (!context.mounted) return;
+
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                       content: Text(
-                                        'Playlist successfully created',
-                                        style: TextStyle(
+                                        result.message,
+                                        style: const TextStyle(
                                           fontFamily: 'Gotham',
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
                                         ),
                                       ),
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: result.success
+                                          ? Colors.green
+                                          : Colors.red.withOpacity(0.8),
                                     ),
                                   );
 
-                                  context.go('/home');
-                                }
-                              } else {
-                                if (!context.mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      'Failed to create playlist',
-                                      style: TextStyle(
-                                        fontFamily: 'Gotham',
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    backgroundColor:
-                                        Colors.red.withOpacity(0.8),
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
+                                  if (result.success) {
+                                    context.go('/home');
+                                  }
+                                },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 5.0, vertical: 5),
-                            child: Text(
-                              'create event',
-                              style: TextStyle(
-                                fontFamily: 'Gotham',
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: createState.isLoading
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text(
+                                    'Create event',
+                                    style: TextStyle(
+                                      fontFamily: 'Gotham',
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

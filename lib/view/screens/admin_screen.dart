@@ -59,7 +59,6 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
     double height = MediaQuery.sizeOf(context).height;
 
     final currentIndex = ref.watch(tabProvider);
@@ -105,9 +104,10 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
               Padding(
                 padding: EdgeInsets.only(
                   top: height * 0.03,
+                  left: height * 0.03,
                 ),
                 child: Align(
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.topLeft,
                   child: Text(
                     ref.watch(playlistProvider.notifier).selectedPlaylistName!,
                     style: const TextStyle(
@@ -207,11 +207,6 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
             ),
           ),
         ),
-        Positioned(
-          right: width * 0.05,
-          top: height * 0.1,
-          child: SvgPicture.asset('assets/path.svg'),
-        )
       ],
     );
   }
@@ -292,53 +287,6 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
           )
         : Column(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Radio<RequestAction>(
-                        value: RequestAction.rejectAll,
-                        groupValue: action,
-                        onChanged: (value) => ref
-                            .read(requestActionProvider.notifier)
-                            .state = value!,
-                        activeColor: Colors.red,
-                        fillColor: const WidgetStatePropertyAll(Colors.red),
-                      ),
-                      const Text(
-                        "Reject All",
-                        style: TextStyle(
-                          fontFamily: 'Gotham',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 10,
-                        ),
-                      ),
-                      Radio<RequestAction>(
-                        value: RequestAction.acceptAll,
-                        groupValue: action,
-                        onChanged: (value) => ref
-                            .read(requestActionProvider.notifier)
-                            .state = value!,
-                        activeColor: Colors.green,
-                        fillColor: const WidgetStatePropertyAll(Colors.green),
-                      ),
-                      const Text(
-                        "Accept All",
-                        style: TextStyle(
-                          fontFamily: 'Gotham',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               Expanded(
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(

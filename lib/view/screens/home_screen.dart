@@ -19,7 +19,7 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const CustomTitle(
-          title: "shared playlists",
+          title: "Shared Playlists",
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -108,5 +108,3 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
-
-

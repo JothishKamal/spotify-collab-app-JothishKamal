@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotify_collab_app/utils/api_util.dart';
 import 'package:spotify_collab_app/view/models/playlist_success_response.dart';
@@ -28,22 +30,27 @@ class PlaylistNotifier extends StateNotifier<List<Playlist>> {
   String? selectedPlaylistName;
 
   Future<void> fetchPlaylists() async {
-    final response = await apiUtil.get('/v1/playlists');
+    try {
+      final response = await apiUtil.get('/v1/playlists');
 
-    if (response.statusCode == 200) {
-      final playlistResponse = PlaylistSuccessResponse.fromJson(response.data);
+      if (response.statusCode == 200) {
+        final playlistResponse =
+            PlaylistSuccessResponse.fromJson(response.data);
 
-      if (playlistResponse.message == "Playlists successfully retrieved") {
-        final playlists = playlistResponse.data
-                ?.map((data) => Playlist(
-                      name: data.name,
-                      playlistUuid: data.playlistUuid,
-                    ))
-                .toList() ??
-            [];
+        if (playlistResponse.message == "Playlists successfully retrieved") {
+          final playlists = playlistResponse.data
+                  ?.map((data) => Playlist(
+                        name: data.name,
+                        playlistUuid: data.playlistUuid,
+                      ))
+                  .toList() ??
+              [];
 
-        state = playlists;
+          state = playlists;
+        }
       }
+    } catch (e) {
+      log(e.toString());
     }
   }
 
