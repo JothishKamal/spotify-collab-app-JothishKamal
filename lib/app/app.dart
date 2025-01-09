@@ -19,7 +19,3 @@ class CollabifyApp extends ConsumerWidget {
     );
   }
 }
-
-void main() {
-  runApp(const CollabifyApp());
-}
