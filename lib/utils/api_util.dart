@@ -25,7 +25,7 @@ class ApiUtil {
 
   factory ApiUtil() => _instance;
 
-  Dio dio = Dio(BaseOptions(
+  final Dio dio = Dio(BaseOptions(
     baseUrl: devUrl,
   ));
 
@@ -49,9 +49,24 @@ class ApiUtil {
     }
   }
 
-  Future<Response> post(String endpoint, Map<String, dynamic> data) async {
+  Future<Response> post(String endpoint, dynamic data) async {
     try {
-      Response response = await dio.post(endpoint, data: data);
+      Response response;
+      if (data is Map<String, dynamic>) {
+        response = await dio.post(endpoint, data: data);
+      } else if (data is FormData) {
+        response = await dio.post(
+          endpoint,
+          data: data,
+          options: Options(
+            contentType: 'multipart/form-data',
+          ),
+        );
+      } else {
+        throw ArgumentError(
+            'Data must be either Map<String, dynamic> or FormData');
+      }
+
       await _updateTokenFromMetadata(response.data);
       return response;
     } catch (e) {
@@ -59,9 +74,9 @@ class ApiUtil {
     }
   }
 
-  Future<Response> delete(String endpoint, Map<String, dynamic> data) async {
+  Future<Response> delete(String endpoint) async {
     try {
-      Response response = await dio.post(endpoint, queryParameters: data);
+      Response response = await dio.delete(endpoint);
       await _updateTokenFromMetadata(response.data);
       return response;
     } catch (e) {

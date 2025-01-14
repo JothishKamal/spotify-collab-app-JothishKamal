@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:spotify_collab_app/providers/playlist_provider.dart';
 
@@ -9,11 +10,15 @@ class PlaylistCard extends ConsumerWidget {
     this.isActive = false,
     required this.name,
     required this.id,
+    required this.imageUrl,
+    required this.memberCount,
   });
 
   final bool isActive;
   final String? name;
   final String? id;
+  final String? imageUrl;
+  final int? memberCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,28 +37,72 @@ class PlaylistCard extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
                 children: [
-                  Container(
-                    height: 57,
-                    width: 57,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey,
+                  if (imageUrl != null && imageUrl!.isNotEmpty)
+                    Container(
+                      height: 57,
+                      width: 57,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(imageUrl!),
+                          fit: BoxFit.cover,
+                          onError: (_, __) => const Icon(Icons.music_note,
+                              size: 32, color: Colors.white),
+                        ),
+                      ),
+                    )
+                  else
+                    Container(
+                      height: 57,
+                      width: 57,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                      ),
+                      child: const Icon(Icons.music_note,
+                          size: 32, color: Colors.white),
                     ),
-                    child: const Icon(Icons.music_note,
-                        size: 32, color: Colors.white),
-                  ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: Text(
-                      name ?? '',
-                      style: TextStyle(
-                        fontFamily: "Gotham",
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: isActive ? Colors.white : Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          name ?? '',
+                          style: TextStyle(
+                            fontFamily: "Gotham",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: isActive ? Colors.white : Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/people.svg',
+                              colorFilter: ColorFilter.mode(
+                                  isActive
+                                      ? const Color(0xfff5f5f5)
+                                      : Colors.black,
+                                  BlendMode.srcIn),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              memberCount?.toString() ?? '',
+                              style: TextStyle(
+                                fontFamily: "Gotham",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: isActive ? Colors.white : Colors.black,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -68,7 +117,7 @@ class PlaylistCard extends ConsumerWidget {
                       onPressed: () {
                         playlistNotifier.selectedPlaylistUuid = id ?? '';
                         playlistNotifier.selectedPlaylistName = name ?? '';
-                        context.push("/admin");
+                        context.push("/admin", extra: {"owner": isActive});
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
