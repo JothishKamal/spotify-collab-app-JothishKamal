@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer';
 
@@ -6,13 +9,19 @@ import 'package:spotify_collab_app/utils/api_util.dart';
 class CreateScreenNotifier extends StateNotifier<AsyncValue<void>> {
   CreateScreenNotifier() : super(const AsyncValue.data(null));
 
-  Future<({bool success, String message})> createPlaylist(String name) async {
+  Future<({bool success, String message})> createPlaylist(String name,
+      {File? image}) async {
     try {
       state = const AsyncValue.loading();
 
-      final response = await apiUtil.post('/v1/playlists', {
+      final formData = FormData.fromMap({
         'name': name,
+        'image': await MultipartFile.fromFile(image!.path),
       });
+      final response = await apiUtil.post(
+        '/v1/playlists',
+        formData,
+      );
 
       log(response.toString());
 

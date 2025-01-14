@@ -157,9 +157,14 @@ class CreateScreen extends ConsumerWidget {
                                     return;
                                   }
 
+                                  final image = ref.watch(photoUploadProvider);
+
                                   final result = await ref
                                       .read(createScreenProvider.notifier)
-                                      .createPlaylist(eventNameController.text);
+                                      .createPlaylist(
+                                        eventNameController.text,
+                                        image: image,
+                                      );
 
                                   if (!context.mounted) return;
 

@@ -23,13 +23,130 @@ class HomeScreen extends ConsumerWidget {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await playlistNotifier.fetchPlaylists();
-        },
-        child: Stack(
-          children: [
-            SizedBox(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Create new Playlist ·",
+                  style: TextStyle(
+                    fontFamily: "Gotham",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                InkWell(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  onTap: () => context.go('/create'),
+                  child: Ink(child: const NewPlaylistButton()),
+                ),
+                const SizedBox(height: 20),
+                RefreshIndicator(
+                  onRefresh: () => playlistNotifier.fetchPlaylists(),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: FutureBuilder(
+                      future: playlistNotifier.fetchPlaylists(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                              child: Text('Failed to load playlists.'));
+                        } else {
+                          final playlists = ref.watch(playlistProvider);
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Your Events",
+                                style: TextStyle(
+                                  fontFamily: "Gotham",
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              if (playlists.ownedPlaylists.isEmpty)
+                                const Center(
+                                    child: Text('No events. Create one!'))
+                              else
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: playlists.ownedPlaylists.length,
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: 10,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return PlaylistCard(
+                                      name:
+                                          playlists.ownedPlaylists[index].name,
+                                      id: playlists
+                                          .ownedPlaylists[index].playlistUuid,
+                                      imageUrl: playlists
+                                          .ownedPlaylists[index].imageUrl,
+                                      isActive: true,
+                                      memberCount: playlists
+                                          .ownedPlaylists[index].memberCount,
+                                    );
+                                  },
+                                ),
+                              const SizedBox(height: 20),
+                              const Text(
+                                "Joined Events",
+                                style: TextStyle(
+                                  fontFamily: "Gotham",
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              if (playlists.memberPlaylists.isEmpty)
+                                const Center(
+                                    child: Text('No events. Join one!'))
+                              else
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: playlists.memberPlaylists.length,
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: 10,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return PlaylistCard(
+                                      name:
+                                          playlists.memberPlaylists[index].name,
+                                      id: playlists
+                                          .memberPlaylists[index].playlistUuid,
+                                      imageUrl: playlists
+                                          .memberPlaylists[index].imageUrl,
+                                      memberCount: playlists
+                                          .memberPlaylists[index].memberCount,
+                                    );
+                                  },
+                                ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IgnorePointer(
+            ignoring: true,
+            child: SizedBox(
               height: double.maxFinite,
               width: double.maxFinite,
               child: SvgPicture.asset(
@@ -39,71 +156,8 @@ class HomeScreen extends ConsumerWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Create new Playlist ·",
-                    style: TextStyle(
-                      fontFamily: "Gotham",
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    onTap: () => context.go('/create'),
-                    child: Ink(child: const NewPlaylistButton()),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Active ·",
-                    style: TextStyle(
-                      fontFamily: "Gotham",
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  FutureBuilder(
-                    future: playlistNotifier.fetchPlaylists(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                            child: Text('Failed to load playlists.'));
-                      } else {
-                        final playlists = ref.watch(playlistProvider);
-                        if (playlists.isEmpty) {
-                          return const Center(
-                              child: Text('No playlists found'));
-                        }
-                        return Expanded(
-                          child: ListView.builder(
-                            itemCount: playlists.length,
-                            itemBuilder: (context, index) {
-                              final playlist = playlists[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: PlaylistCard(
-                                    name: playlist.name,
-                                    id: playlist.playlistUuid),
-                              );
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
