@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:developer';
-
 import 'package:spotify_collab_app/utils/api_util.dart';
 
 class CreateScreenNotifier extends StateNotifier<AsyncValue<void>> {
@@ -22,8 +20,6 @@ class CreateScreenNotifier extends StateNotifier<AsyncValue<void>> {
         '/v1/playlists',
         formData,
       );
-
-      log(response.toString());
 
       if (response.statusCode == 200 &&
           response.data["message"] == "playlist successfully created") {

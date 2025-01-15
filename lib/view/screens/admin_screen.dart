@@ -134,7 +134,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                                     if (!context.mounted) return;
 
                                     switch (status) {
-                                      case DeletePlaylistStatus.success:
+                                      case DeleteStatus.success:
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
@@ -153,7 +153,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                                         context.pop();
                                         context.pop();
                                         break;
-                                      case DeletePlaylistStatus.failure:
+                                      case DeleteStatus.failure:
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
@@ -171,7 +171,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                                         );
                                         context.pop();
                                         break;
-                                      case DeletePlaylistStatus.error:
+                                      case DeleteStatus.error:
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
@@ -265,7 +265,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                     const Divider(
