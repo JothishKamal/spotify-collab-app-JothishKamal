@@ -75,7 +75,15 @@ class HomeScreen extends ConsumerWidget {
                               const SizedBox(height: 10),
                               if (playlists.ownedPlaylists.isEmpty)
                                 const Center(
-                                    child: Text('No events. Create one!'))
+                                  child: Text(
+                                    'No events. Create one!',
+                                    style: TextStyle(
+                                      fontFamily: "Gotham",
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                )
                               else
                                 ListView.separated(
                                   shrinkWrap: true,
@@ -111,7 +119,15 @@ class HomeScreen extends ConsumerWidget {
                               const SizedBox(height: 10),
                               if (playlists.memberPlaylists.isEmpty)
                                 const Center(
-                                    child: Text('No events. Join one!'))
+                                  child: Text(
+                                    'No events. Join one!',
+                                    style: TextStyle(
+                                      fontFamily: "Gotham",
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                )
                               else
                                 ListView.separated(
                                   shrinkWrap: true,
