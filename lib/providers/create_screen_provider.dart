@@ -12,10 +12,19 @@ class CreateScreenNotifier extends StateNotifier<AsyncValue<void>> {
     try {
       state = const AsyncValue.loading();
 
-      final formData = FormData.fromMap({
-        'name': name,
-        'image': await MultipartFile.fromFile(image!.path),
-      });
+      final FormData formData;
+
+      if (image != null) {
+        formData = FormData.fromMap({
+          'name': name,
+          'image': await MultipartFile.fromFile(image.path),
+        });
+      } else {
+        formData = FormData.fromMap({
+          'name': name,
+        });
+      }
+
       final response = await apiUtil.post(
         '/v1/playlists',
         formData,
