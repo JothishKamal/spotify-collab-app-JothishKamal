@@ -1,6 +1,6 @@
 {
-    "name": "spotifycollab",
-    "short_name": "spotifycollab",
+    "name": "collabify",
+    "short_name": "collabify",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
