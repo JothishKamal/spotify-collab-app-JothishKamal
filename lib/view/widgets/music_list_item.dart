@@ -199,9 +199,24 @@ class MusicListItem extends ConsumerWidget {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('Delete Song'),
+                              title: const Text(
+                                'Delete Song',
+                                style: TextStyle(
+                                  fontFamily: 'Gotham',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
                               content: const Text(
-                                  'Are you sure you want to delete this song?'),
+                                'Are you sure you want to delete this song?',
+                                style: TextStyle(
+                                  fontFamily: 'Gotham',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),

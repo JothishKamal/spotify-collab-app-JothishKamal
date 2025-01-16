@@ -97,9 +97,24 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Delete Playlist'),
+                            title: const Text(
+                              'Delete Playlist',
+                              style: TextStyle(
+                                fontFamily: 'Gotham',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
                             content: const Text(
-                                'Are you sure you want to delete this playlist?'),
+                              'Are you sure you want to delete this playlist?',
+                              style: TextStyle(
+                                fontFamily: 'Gotham',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                              ),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
