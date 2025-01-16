@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +15,16 @@ class SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkForToken();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await wait();
+    await _checkForToken();
+  }
+
+  Future<void> wait() async {
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   Future<void> _checkForToken() async {
@@ -32,10 +42,10 @@ class SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
+    return SvgPicture.asset(
+      'assets/splash.svg',
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
     );
   }
 }

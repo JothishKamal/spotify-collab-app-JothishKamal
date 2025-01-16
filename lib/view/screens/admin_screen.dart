@@ -90,114 +90,94 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
             ),
             actions: [
               (GoRouterState.of(context).extra as Map<String, dynamic>)['owner']
-                  ? PopupMenuButton<String>(
-                      icon: const Icon(
-                        Icons.more_vert,
-                        color: Color(0xffD1D2D9),
-                        size: 16,
-                      ),
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete_outline, color: Colors.red),
-                              SizedBox(width: 8),
-                              Text('Delete',
-                                  style: TextStyle(color: Colors.red)),
+                  ? IconButton(
+                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Delete Playlist'),
+                            content: const Text(
+                                'Are you sure you want to delete this playlist?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  final status = await ref
+                                      .read(playlistProvider.notifier)
+                                      .deletePlaylist(ref
+                                          .read(playlistProvider.notifier)
+                                          .selectedPlaylistUuid!);
+
+                                  if (!context.mounted) return;
+
+                                  switch (status) {
+                                    case DeleteStatus.success:
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Playlist deleted successfully',
+                                            style: TextStyle(
+                                              fontFamily: 'Gotham',
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                      context.pop();
+                                      context.pop();
+                                      break;
+                                    case DeleteStatus.failure:
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Failed to delete playlist',
+                                            style: TextStyle(
+                                              fontFamily: 'Gotham',
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      context.pop();
+                                      break;
+                                    case DeleteStatus.error:
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Error occurred while deleting playlist',
+                                            style: TextStyle(
+                                              fontFamily: 'Gotham',
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      context.pop();
+                                      break;
+                                  }
+                                },
+                                child: const Text('Delete',
+                                    style: TextStyle(color: Colors.red)),
+                              ),
                             ],
                           ),
-                        ),
-                      ],
-                      onSelected: (String value) {
-                        if (value == 'delete') {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Delete Playlist'),
-                              content: const Text(
-                                  'Are you sure you want to delete this playlist?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    final status = await ref
-                                        .read(playlistProvider.notifier)
-                                        .deletePlaylist(ref
-                                            .read(playlistProvider.notifier)
-                                            .selectedPlaylistUuid!);
-
-                                    if (!context.mounted) return;
-
-                                    switch (status) {
-                                      case DeletePlaylistStatus.success:
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Playlist deleted successfully',
-                                              style: TextStyle(
-                                                fontFamily: 'Gotham',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            backgroundColor: Colors.green,
-                                          ),
-                                        );
-                                        context.pop();
-                                        context.pop();
-                                        break;
-                                      case DeletePlaylistStatus.failure:
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Failed to delete playlist',
-                                              style: TextStyle(
-                                                fontFamily: 'Gotham',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                        context.pop();
-                                        break;
-                                      case DeletePlaylistStatus.error:
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Error occurred while deleting playlist',
-                                              style: TextStyle(
-                                                fontFamily: 'Gotham',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                        context.pop();
-                                        break;
-                                    }
-                                  },
-                                  child: const Text('Delete',
-                                      style: TextStyle(color: Colors.red)),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
+                        );
                       },
                     )
                   : const SizedBox.shrink()
@@ -265,7 +245,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                     const Divider(

@@ -121,6 +121,10 @@ class PlaylistCard extends ConsumerWidget {
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
+                        minimumSize: const Size(97, 31),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
                       child: Text(
                         isActive ? "Manage" : "View",

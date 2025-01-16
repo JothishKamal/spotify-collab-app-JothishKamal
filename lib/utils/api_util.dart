@@ -74,9 +74,14 @@ class ApiUtil {
     }
   }
 
-  Future<Response> delete(String endpoint) async {
+  Future<Response> delete(String endpoint, {dynamic data}) async {
     try {
-      Response response = await dio.delete(endpoint);
+      Response response;
+      if (data != null) {
+        response = await dio.delete(endpoint, data: data);
+      } else {
+        response = await dio.delete(endpoint);
+      }
       await _updateTokenFromMetadata(response.data);
       return response;
     } catch (e) {

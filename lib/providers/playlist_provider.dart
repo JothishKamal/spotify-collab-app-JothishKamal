@@ -48,7 +48,7 @@ class HomeScreenInfo {
   }
 }
 
-enum DeletePlaylistStatus { success, failure, error }
+enum DeleteStatus { success, failure, error }
 
 class PlaylistNotifier extends StateNotifier<HomeScreenInfo> {
   PlaylistNotifier()
@@ -98,7 +98,7 @@ class PlaylistNotifier extends StateNotifier<HomeScreenInfo> {
     }
   }
 
-  Future<DeletePlaylistStatus> deletePlaylist(String playlistUuid) async {
+  Future<DeleteStatus> deletePlaylist(String playlistUuid) async {
     try {
       final response = await apiUtil.delete('/v1/playlists/$playlistUuid');
       log(jsonEncode(response.data));
@@ -118,13 +118,13 @@ class PlaylistNotifier extends StateNotifier<HomeScreenInfo> {
           state = state.copyWith(
               ownedPlaylists: ownedPlaylists, memberPlaylists: memberPlaylists);
 
-          return DeletePlaylistStatus.success;
+          return DeleteStatus.success;
         }
       }
-      return DeletePlaylistStatus.failure;
+      return DeleteStatus.failure;
     } catch (e) {
       log(e.toString());
-      return DeletePlaylistStatus.error;
+      return DeleteStatus.error;
     }
   }
 
