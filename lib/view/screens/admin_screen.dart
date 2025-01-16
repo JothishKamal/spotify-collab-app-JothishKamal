@@ -118,7 +118,13 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text('Cancel'),
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -188,8 +194,14 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                                       break;
                                   }
                                 },
-                                child: const Text('Delete',
-                                    style: TextStyle(color: Colors.red)),
+                                child: const Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ],
                           ),

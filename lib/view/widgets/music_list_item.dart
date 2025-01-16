@@ -220,7 +220,13 @@ class MusicListItem extends ConsumerWidget {
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: const Text('Cancel'),
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      fontFamily: 'Gotham',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () async {
@@ -291,8 +297,14 @@ class MusicListItem extends ConsumerWidget {
                                         break;
                                     }
                                   },
-                                  child: const Text('Delete',
-                                      style: TextStyle(color: Colors.red)),
+                                  child: const Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Gotham',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
