@@ -80,6 +80,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
             automaticallyImplyLeading: false,
             title: IconButton(
               onPressed: () {
+                ref.read(tabProvider.notifier).state = 0;
                 context.pop();
               },
               iconSize: 16,
@@ -96,13 +97,34 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Delete Playlist'),
+                            title: const Text(
+                              'Delete Playlist',
+                              style: TextStyle(
+                                fontFamily: 'Gotham',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
                             content: const Text(
-                                'Are you sure you want to delete this playlist?'),
+                              'Are you sure you want to delete this playlist?',
+                              style: TextStyle(
+                                fontFamily: 'Gotham',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                              ),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text('Cancel'),
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -172,8 +194,14 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
                                       break;
                                   }
                                 },
-                                child: const Text('Delete',
-                                    style: TextStyle(color: Colors.red)),
+                                child: const Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -307,51 +335,54 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
               style: TextStyle(
                 fontFamily: 'Gotham',
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
                 fontSize: 14,
               ),
             ),
           )
-        : Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: items.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      color: Color(0xFFCCCCCC),
-                      height: 1,
+        : RefreshIndicator(
+            onRefresh: _fetchSongs,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: items.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: Color(0xFFCCCCCC),
+                        height: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        final item = items[index];
+                        return isPlaylist
+                            ? MusicListItem(
+                                id: item.track!.track!.id!,
+                                title: item.track!.track!.name!,
+                                subtitle: item.track!.track!.artists!
+                                    .map((artist) => artist.name!)
+                                    .join(', '),
+                                imageUrl:
+                                    item.track!.track!.album!.images![0].url!,
+                                isPlaylist: isPlaylist,
+                                isRequest: isRequest,
+                                isParticipant: isParticipant,
+                              )
+                            : MusicListItem(
+                                id: item.track!.track!.id!,
+                                title: item.track!.track!.album!.name!,
+                                subtitle: null,
+                                imageUrl: null,
+                                isPlaylist: isPlaylist,
+                                isRequest: isRequest,
+                                isParticipant: isParticipant,
+                              );
+                      },
                     ),
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return isPlaylist
-                          ? MusicListItem(
-                              id: item.track!.track!.id!,
-                              title: item.track!.track!.name!,
-                              subtitle: item.track!.track!.artists!
-                                  .map((artist) => artist.name!)
-                                  .join(', '),
-                              imageUrl:
-                                  item.track!.track!.album!.images![0].url!,
-                              isPlaylist: isPlaylist,
-                              isRequest: isRequest,
-                              isParticipant: isParticipant,
-                            )
-                          : MusicListItem(
-                              id: item.track!.track!.id!,
-                              title: item.track!.track!.album!.name!,
-                              subtitle: null,
-                              imageUrl: null,
-                              isPlaylist: isPlaylist,
-                              isRequest: isRequest,
-                              isParticipant: isParticipant,
-                            );
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
   }
@@ -365,37 +396,40 @@ class _AdminScreenState extends ConsumerState<AdminScreen>
               style: TextStyle(
                 fontFamily: 'Gotham',
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
                 fontSize: 14,
               ),
             ),
           )
-        : Column(
-            children: [
-              Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
-                  itemCount: items.length,
-                  separatorBuilder: (context, index) => const Divider(
-                    color: Color(0xFFCCCCCC),
-                    height: 1,
+        : RefreshIndicator(
+            onRefresh: _fetchSongs,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    itemCount: items.length,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: Color(0xFFCCCCCC),
+                      height: 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return MusicListItem(
+                        id: item.id!,
+                        title: item.name!,
+                        subtitle: item.artists!
+                            .map((artist) => artist.name!)
+                            .join(', '),
+                        imageUrl: item.album!.images![0].url!,
+                        isRequest: true,
+                      );
+                    },
                   ),
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return MusicListItem(
-                      id: item.id!,
-                      title: item.name!,
-                      subtitle: item.artists!
-                          .map((artist) => artist.name!)
-                          .join(', '),
-                      imageUrl: item.album!.images![0].url!,
-                      isRequest: true,
-                    );
-                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           );
   }
 }

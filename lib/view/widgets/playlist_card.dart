@@ -55,12 +55,13 @@ class PlaylistCard extends ConsumerWidget {
                     Container(
                       height: 57,
                       width: 57,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.grey,
+                        color: isActive ? Colors.white : Colors.grey,
                       ),
-                      child: const Icon(Icons.music_note,
-                          size: 32, color: Colors.white),
+                      child: Icon(Icons.music_note,
+                          size: 32,
+                          color: !isActive ? Colors.white : Colors.grey),
                     ),
                   const SizedBox(width: 16),
                   Expanded(

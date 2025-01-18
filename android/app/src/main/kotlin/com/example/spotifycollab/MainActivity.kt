@@ -1,4 +1,4 @@
-package com.example.spotifycollab
+package com.example.collabify
 
 import io.flutter.embedding.android.FlutterActivity
 

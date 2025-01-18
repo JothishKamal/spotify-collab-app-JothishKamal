@@ -127,65 +127,67 @@ class MusicListItem extends ConsumerWidget {
                 ),
               ),
         trailing: isRequest
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.red),
-                    onPressed: () async {
-                      final success = await songsNotifier.rejectSong(
-                          playlistsProvider.selectedPlaylistUuid!, id!);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              success
-                                  ? 'Song rejected'
-                                  : 'Failed to reject song',
-                              style: const TextStyle(
-                                fontFamily: 'Gotham',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+            ? (GoRouterState.of(context).extra as Map<String, dynamic>)['owner']
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.red),
+                        onPressed: () async {
+                          final success = await songsNotifier.rejectSong(
+                              playlistsProvider.selectedPlaylistUuid!, id!);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  success
+                                      ? 'Song rejected'
+                                      : 'Failed to reject song',
+                                  style: const TextStyle(
+                                    fontFamily: 'Gotham',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                backgroundColor: success
+                                    ? Colors.green
+                                    : Colors.red.withOpacity(0.8),
                               ),
-                            ),
-                            backgroundColor: success
-                                ? Colors.green
-                                : Colors.red.withOpacity(0.8),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.check, color: Colors.green),
-                    onPressed: () async {
-                      final success = await songsNotifier.acceptSong(
-                          playlistsProvider.selectedPlaylistUuid!, id!);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              success
-                                  ? 'Song accepted'
-                                  : 'Failed to accept song',
-                              style: const TextStyle(
-                                fontFamily: 'Gotham',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                            );
+                          }
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.check, color: Colors.green),
+                        onPressed: () async {
+                          final success = await songsNotifier.acceptSong(
+                              playlistsProvider.selectedPlaylistUuid!, id!);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  success
+                                      ? 'Song accepted'
+                                      : 'Failed to accept song',
+                                  style: const TextStyle(
+                                    fontFamily: 'Gotham',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                backgroundColor: success
+                                    ? Colors.green
+                                    : Colors.red.withOpacity(0.8),
                               ),
-                            ),
-                            backgroundColor: success
-                                ? Colors.green
-                                : Colors.red.withOpacity(0.8),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              )
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  )
+                : null
             : isParticipant
                 ? null
                 : (GoRouterState.of(context).extra
@@ -197,13 +199,34 @@ class MusicListItem extends ConsumerWidget {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('Delete Song'),
+                              title: const Text(
+                                'Delete Song',
+                                style: TextStyle(
+                                  fontFamily: 'Gotham',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
                               content: const Text(
-                                  'Are you sure you want to delete this song?'),
+                                'Are you sure you want to delete this song?',
+                                style: TextStyle(
+                                  fontFamily: 'Gotham',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: const Text('Cancel'),
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      fontFamily: 'Gotham',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () async {
@@ -274,8 +297,14 @@ class MusicListItem extends ConsumerWidget {
                                         break;
                                     }
                                   },
-                                  child: const Text('Delete',
-                                      style: TextStyle(color: Colors.red)),
+                                  child: const Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: 'Gotham',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
